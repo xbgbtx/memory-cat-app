@@ -1,7 +1,11 @@
 import { LitElement, html, css } from 'lit';
 import { property } from 'lit/decorators.js';
+import { interpret } from 'xstate';
+import { memoryCatMachine } from './MemoryCatAppState.js';
 
 export class MemoryCatApp extends LitElement {
+  @property({ type: String }) appState = '';
+
   static styles = css`
     :host {
       min-height: 100vh;
@@ -31,10 +35,20 @@ export class MemoryCatApp extends LitElement {
     }
   `;
 
+  constructor() {
+    super();
+    const stateService = interpret(memoryCatMachine);
+    stateService.onTransition(state => {
+      this.appState = JSON.stringify(state);
+    });
+    stateService.start();
+  }
+
   render() {
     return html`
       <main>
         <h1>Memory Cats!</h1>
+        <p>State = ${this.appState}</p>
       </main>
     `;
   }

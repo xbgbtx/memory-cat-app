@@ -1,9 +1,23 @@
+import { __decorate } from "tslib";
 import { LitElement, html, css } from 'lit';
+import { property } from 'lit/decorators.js';
+import { interpret } from 'xstate';
+import { memoryCatMachine } from './MemoryCatAppState.js';
 export class MemoryCatApp extends LitElement {
+    constructor() {
+        super();
+        this.appState = '';
+        const stateService = interpret(memoryCatMachine);
+        stateService.onTransition(state => {
+            this.appState = JSON.stringify(state);
+        });
+        stateService.start();
+    }
     render() {
         return html `
       <main>
         <h1>Memory Cats!</h1>
+        <p>State = ${this.appState}</p>
       </main>
     `;
     }
@@ -36,4 +50,7 @@ MemoryCatApp.styles = css `
       margin-left: 5px;
     }
   `;
+__decorate([
+    property({ type: String })
+], MemoryCatApp.prototype, "appState", void 0);
 //# sourceMappingURL=MemoryCatApp.js.map
