@@ -13,22 +13,22 @@
           "members": [
             {
               "kind": "field",
-              "name": "title",
+              "name": "appState",
               "type": {
                 "text": "string"
               },
-              "default": "'My app'",
-              "attribute": "title"
+              "default": "''",
+              "attribute": "appState"
             }
           ],
           "attributes": [
             {
-              "name": "title",
+              "name": "appState",
               "type": {
                 "text": "string"
               },
-              "default": "'My app'",
-              "fieldName": "title"
+              "default": "''",
+              "fieldName": "appState"
             }
           ],
           "superclass": {
@@ -46,6 +46,26 @@
           "declaration": {
             "name": "MemoryCatApp",
             "module": "src/MemoryCatApp.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/MemoryCatAppState.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "memoryCatMachine"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "memoryCatMachine",
+          "declaration": {
+            "name": "memoryCatMachine",
+            "module": "src/MemoryCatAppState.ts"
           }
         }
       ]
@@ -88,6 +108,105 @@
           "declaration": {
             "name": "App",
             "module": "stories/memory-cat-app.stories.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "out-tsc/src/MemoryCatApp.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "MemoryCatApp",
+          "members": [
+            {
+              "kind": "field",
+              "name": "appState",
+              "type": {
+                "text": "string"
+              },
+              "default": "''"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "memory-cat-app",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "MemoryCatApp",
+          "declaration": {
+            "name": "MemoryCatApp",
+            "module": "out-tsc/src/MemoryCatApp.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "out-tsc/src/MemoryCatAppState.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "memoryCatMachine"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "memoryCatMachine",
+          "declaration": {
+            "name": "memoryCatMachine",
+            "module": "out-tsc/src/MemoryCatAppState.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "out-tsc/src/memory-cat-app.js",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "memory-cat-app",
+          "declaration": {
+            "name": "MemoryCatApp",
+            "module": "/out-tsc/src/MemoryCatApp.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "out-tsc/stories/memory-cat-app.stories.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "App"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "default",
+          "declaration": {
+            "module": "out-tsc/stories/memory-cat-app.stories.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "App",
+          "declaration": {
+            "name": "App",
+            "module": "out-tsc/stories/memory-cat-app.stories.js"
           }
         }
       ]

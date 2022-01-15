@@ -5,6 +5,7 @@ import { importMetaAssets } from '@web/rollup-plugin-import-meta-assets';
 import { terser } from 'rollup-plugin-terser';
 import { generateSW } from 'rollup-plugin-workbox';
 import path from 'path';
+import replace from '@rollup/plugin-replace';
 
 export default {
   input: 'index.html',
@@ -79,6 +80,10 @@ export default {
       skipWaiting: true,
       clientsClaim: true,
       runtimeCaching: [{ urlPattern: 'polyfills/*.js', handler: 'CacheFirst' }],
+    }),
+    /** Fix for xstate */
+    replace({
+      'process.env.NODE_ENV': process.env.NODE_ENV,
     }),
   ],
 };
