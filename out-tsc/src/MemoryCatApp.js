@@ -14,6 +14,12 @@ export class MemoryCatApp extends LitElement {
             this.stateName = s.replace(/"/g, '');
         });
         appState.start();
+        this.addEventListener('memory-cat-event', this._appEvent);
+    }
+    _appEvent(e) {
+        const action = e.action;
+        appState.send(action);
+        return true;
     }
     render() {
         return html `
@@ -28,6 +34,8 @@ export class MemoryCatApp extends LitElement {
         switch (this.stateName) {
             case 'welcome':
                 return html `<mc-welcome></mc-welcome>`;
+            case 'getCards':
+                return html `<p>Getting Cards!</p>`;
             default:
                 return html `Error!`;
         }

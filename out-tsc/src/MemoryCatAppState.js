@@ -5,7 +5,7 @@ const memoryCatMachine = createMachine({
     states: {
         welcome: {
             on: {
-                START: { target: 'getCards' },
+                start: { target: 'getCards' },
             },
         },
         getCards: {},

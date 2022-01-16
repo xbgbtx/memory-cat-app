@@ -3,6 +3,7 @@ import { property } from 'lit/decorators.js';
 import { interpret } from 'xstate';
 import { memoryCatMachine } from './MemoryCatAppState.js';
 import './MemoryCatWelcome.js';
+import { MemoryCatEvent } from './MemoryCatEvent.js';
 
 const appState = interpret(memoryCatMachine);
 
@@ -45,6 +46,13 @@ export class MemoryCatApp extends LitElement {
       this.stateName = s.replace(/"/g, '');
     });
     appState.start();
+    this.addEventListener('memory-cat-event', this._appEvent);
+  }
+
+  _appEvent(e: Event) {
+    const action = (e as MemoryCatEvent).action;
+    appState.send(action);
+    return true;
   }
 
   render() {
@@ -61,6 +69,8 @@ export class MemoryCatApp extends LitElement {
     switch (this.stateName) {
       case 'welcome':
         return html`<mc-welcome></mc-welcome>`;
+      case 'getCards':
+        return html`<p>Getting Cards!</p>`;
       default:
         return html`Error!`;
     }

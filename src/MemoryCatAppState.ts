@@ -1,18 +1,12 @@
 import { createMachine } from 'xstate';
 
-type MemoryCatEvent = { type: 'START' };
-
-interface MemoryCatContext {
-  cardsLoaded: number;
-}
-
-const memoryCatMachine = createMachine<MemoryCatContext, MemoryCatEvent>({
+const memoryCatMachine = createMachine({
   id: 'memory-cat',
   initial: 'welcome',
   states: {
     welcome: {
       on: {
-        START: { target: 'getCards' },
+        start: { target: 'getCards' },
       },
     },
     getCards: {},
