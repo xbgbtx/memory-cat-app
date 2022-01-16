@@ -1,3 +1,8 @@
+import { fromRollup } from '@web/dev-server-rollup';
+import rollupReplace from '@rollup/plugin-replace';
+
+const replace = fromRollup(rollupReplace);
+
 // import { hmrPlugin, presets } from '@open-wc/dev-server-hmr';
 
 /** Use Hot Module replacement by adding --hmr to the start command */
@@ -10,7 +15,7 @@ export default /** @type {import('@web/dev-server').DevServerConfig} */ ({
   nodeResolve: {
     exportConditions: ['browser', 'development'],
   },
-  
+
   /** Compile JS for older browsers. Requires @web/dev-server-esbuild plugin */
   // esbuildTarget: 'auto'
 
@@ -18,6 +23,10 @@ export default /** @type {import('@web/dev-server').DevServerConfig} */ ({
   // appIndex: 'demo/index.html',
 
   plugins: [
+    replace({
+      include: ['node_modules/xstate/**/*.js'],
+      'process.env.NODE_ENV': process.env.NODE_ENV,
+    }),
     /** Use Hot Module Replacement by uncommenting. Requires @open-wc/dev-server-hmr plugin */
     // hmr && hmrPlugin({ exclude: ['**/*/node_modules/**/*'], presets: [presets.litElement] }),
   ],
