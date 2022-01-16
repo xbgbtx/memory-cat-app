@@ -5,6 +5,9 @@ import { interpret } from 'xstate';
 import { memoryCatMachine } from './MemoryCatAppState.js';
 import './MemoryCatWelcome.js';
 const appState = interpret(memoryCatMachine);
+function forwardAppEvent(e) {
+    appState.send(e.action);
+}
 export class MemoryCatApp extends LitElement {
     constructor() {
         super();
@@ -14,12 +17,7 @@ export class MemoryCatApp extends LitElement {
             this.stateName = s.replace(/"/g, '');
         });
         appState.start();
-        this.addEventListener('memory-cat-event', this._appEvent);
-    }
-    _appEvent(e) {
-        const action = e.action;
-        appState.send(action);
-        return true;
+        this.addEventListener('memory-cat-event', forwardAppEvent);
     }
     render() {
         return html `

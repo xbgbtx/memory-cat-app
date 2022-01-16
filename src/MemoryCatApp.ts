@@ -7,6 +7,10 @@ import { MemoryCatEvent } from './MemoryCatEvent.js';
 
 const appState = interpret(memoryCatMachine);
 
+function forwardAppEvent(e: Event) {
+  appState.send((e as MemoryCatEvent).action);
+}
+
 export class MemoryCatApp extends LitElement {
   @property({ type: String }) stateName = '';
 
@@ -46,13 +50,7 @@ export class MemoryCatApp extends LitElement {
       this.stateName = s.replace(/"/g, '');
     });
     appState.start();
-    this.addEventListener('memory-cat-event', this._appEvent);
-  }
-
-  _appEvent(e: Event) {
-    const action = (e as MemoryCatEvent).action;
-    appState.send(action);
-    return true;
+    this.addEventListener('memory-cat-event', forwardAppEvent);
   }
 
   render() {
