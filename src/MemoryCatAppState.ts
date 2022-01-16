@@ -1,6 +1,12 @@
 import { createMachine } from 'xstate';
 
-const memoryCatMachine = createMachine({
+type MemoryCatEvent = { type: 'START' };
+
+interface MemoryCatContext {
+  cardsLoaded: number;
+}
+
+const memoryCatMachine = createMachine<MemoryCatContext, MemoryCatEvent>({
   id: 'memory-cat',
   initial: 'welcome',
   states: {

@@ -3,23 +3,34 @@ import { LitElement, html, css } from 'lit';
 import { property } from 'lit/decorators.js';
 import { interpret } from 'xstate';
 import { memoryCatMachine } from './MemoryCatAppState.js';
+import './MemoryCatWelcome.js';
+const appState = interpret(memoryCatMachine);
 export class MemoryCatApp extends LitElement {
     constructor() {
         super();
-        this.appState = '';
-        const stateService = interpret(memoryCatMachine);
-        stateService.onTransition(state => {
-            this.appState = JSON.stringify(state);
+        this.stateName = '';
+        appState.onTransition(state => {
+            const s = JSON.stringify(state.value);
+            this.stateName = s.replace(/"/g, '');
         });
-        stateService.start();
+        appState.start();
     }
     render() {
         return html `
       <main>
         <h1>Memory Cats!</h1>
-        <p>State = ${this.appState}</p>
+        ${this.renderApp()}
+        <p>State = ${this.stateName}</p>
       </main>
     `;
+    }
+    renderApp() {
+        switch (this.stateName) {
+            case 'welcome':
+                return html `<mc-welcome></mc-welcome>`;
+            default:
+                return html `Error!`;
+        }
     }
 }
 MemoryCatApp.styles = css `
@@ -52,5 +63,5 @@ MemoryCatApp.styles = css `
   `;
 __decorate([
     property({ type: String })
-], MemoryCatApp.prototype, "appState", void 0);
+], MemoryCatApp.prototype, "stateName", void 0);
 //# sourceMappingURL=MemoryCatApp.js.map

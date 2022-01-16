@@ -2,9 +2,12 @@ import { LitElement, html, css } from 'lit';
 import { property } from 'lit/decorators.js';
 import { interpret } from 'xstate';
 import { memoryCatMachine } from './MemoryCatAppState.js';
+import './MemoryCatWelcome.js';
+
+const appState = interpret(memoryCatMachine);
 
 export class MemoryCatApp extends LitElement {
-  @property({ type: String }) appState = '';
+  @property({ type: String }) stateName = '';
 
   static styles = css`
     :host {
@@ -37,19 +40,29 @@ export class MemoryCatApp extends LitElement {
 
   constructor() {
     super();
-    const stateService = interpret(memoryCatMachine);
-    stateService.onTransition(state => {
-      this.appState = JSON.stringify(state);
+    appState.onTransition(state => {
+      const s = JSON.stringify(state.value);
+      this.stateName = s.replace(/"/g, '');
     });
-    stateService.start();
+    appState.start();
   }
 
   render() {
     return html`
       <main>
         <h1>Memory Cats!</h1>
-        <p>State = ${this.appState}</p>
+        ${this.renderApp()}
+        <p>State = ${this.stateName}</p>
       </main>
     `;
+  }
+
+  renderApp() {
+    switch (this.stateName) {
+      case 'welcome':
+        return html`<mc-welcome></mc-welcome>`;
+      default:
+        return html`Error!`;
+    }
   }
 }
