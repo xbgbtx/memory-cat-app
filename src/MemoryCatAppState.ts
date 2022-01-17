@@ -1,7 +1,13 @@
 import { createMachine, assign } from 'xstate';
 
-interface MemoryCatContext {
+export interface MemoryCatContext {
   catUrls: Array<string>;
+}
+
+export function memoryCatsInitialContext() {
+  return {
+    catUrls: [],
+  };
 }
 
 const addCatUrl = assign({
@@ -16,16 +22,25 @@ const memoryCatMachine = createMachine<MemoryCatContext>(
   {
     id: 'memory-cat',
     initial: 'welcome',
-    context: {
-      catUrls: [],
-    },
+    context: memoryCatsInitialContext(),
     states: {
       welcome: {
         on: {
-          start: { target: 'fetchCats' },
+          START: { target: 'fetchCats' },
         },
       },
-      fetchCats: {},
+      fetchCats: {
+        always: {
+          target: 'gameplay',
+          cond: 'enoughCats',
+        },
+        on: {
+          RECEIVEDCATURL: {
+            target: 'fetchCats',
+            actions: 'addCatUrl',
+          },
+        },
+      },
       gameplay: {},
     },
   },

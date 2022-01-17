@@ -1,7 +1,11 @@
 import { LitElement, html, css } from 'lit';
 import { property } from 'lit/decorators.js';
 import { interpret } from 'xstate';
-import { memoryCatMachine } from './MemoryCatAppState.js';
+import {
+  memoryCatMachine,
+  MemoryCatContext,
+  memoryCatsInitialContext,
+} from './MemoryCatAppState.js';
 import './MemoryCatWelcome.js';
 import './MemoryCatFetch.js';
 
@@ -13,6 +17,8 @@ function forwardAppEvent(e: Event) {
 
 export class MemoryCatApp extends LitElement {
   @property({ type: String }) stateName = '';
+
+  @property({ type: Object }) context: MemoryCatContext;
 
   static styles = css`
     :host {
@@ -45,9 +51,13 @@ export class MemoryCatApp extends LitElement {
 
   constructor() {
     super();
+
+    this.context = memoryCatsInitialContext();
+
     appState.onTransition(state => {
       const s = JSON.stringify(state.value);
       this.stateName = s.replace(/"/g, '');
+      this.context = state.context;
     });
     appState.start();
     this.addEventListener('memory-cat-event', forwardAppEvent);
@@ -68,7 +78,9 @@ export class MemoryCatApp extends LitElement {
       case 'welcome':
         return html`<mc-welcome></mc-welcome>`;
       case 'fetchCats':
-        return html`<mc-fetch></mc-fetch>`;
+        return html`<mc-fetch
+          numFetched="${this.context.catUrls.length}"
+        ></mc-fetch>`;
       default:
         return html`Error!`;
     }

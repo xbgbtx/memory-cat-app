@@ -18,7 +18,7 @@ export class MemoryCatWelcome extends LitElement {
     const stateEvent = new CustomEvent('memory-cat-event', {
       bubbles: true,
       composed: true,
-      detail: { type: 'start' },
+      detail: { type: 'START' },
     });
     this.dispatchEvent(stateEvent);
   }
