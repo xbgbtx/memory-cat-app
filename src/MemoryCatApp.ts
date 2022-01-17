@@ -3,13 +3,12 @@ import { property } from 'lit/decorators.js';
 import { interpret } from 'xstate';
 import { memoryCatMachine } from './MemoryCatAppState.js';
 import './MemoryCatWelcome.js';
-import { MemoryCatEvent } from './MemoryCatEvent.js';
 import './MemoryCatFetch.js';
 
 const appState = interpret(memoryCatMachine);
 
 function forwardAppEvent(e: Event) {
-  appState.send((e as MemoryCatEvent).action);
+  appState.send((e as CustomEvent).detail);
 }
 
 export class MemoryCatApp extends LitElement {

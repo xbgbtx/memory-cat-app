@@ -7,7 +7,7 @@ import './MemoryCatWelcome.js';
 import './MemoryCatFetch.js';
 const appState = interpret(memoryCatMachine);
 function forwardAppEvent(e) {
-    appState.send(e.action);
+    appState.send(e.detail);
 }
 export class MemoryCatApp extends LitElement {
     constructor() {

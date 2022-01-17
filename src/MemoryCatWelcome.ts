@@ -1,6 +1,5 @@
 import { LitElement, html, css } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { MemoryCatEvent } from './MemoryCatEvent.js';
 
 @customElement('mc-welcome')
 export class MemoryCatWelcome extends LitElement {
@@ -16,7 +15,11 @@ export class MemoryCatWelcome extends LitElement {
   }
 
   private _startFetch() {
-    const stateEvent = new MemoryCatEvent('start');
+    const stateEvent = new CustomEvent('memory-cat-event', {
+      bubbles: true,
+      composed: true,
+      detail: { type: 'start' },
+    });
     this.dispatchEvent(stateEvent);
   }
 }

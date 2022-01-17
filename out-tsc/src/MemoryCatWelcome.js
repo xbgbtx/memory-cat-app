@@ -1,7 +1,6 @@
 import { __decorate } from "tslib";
 import { LitElement, html, css } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { MemoryCatEvent } from './MemoryCatEvent.js';
 let MemoryCatWelcome = class MemoryCatWelcome extends LitElement {
     render() {
         return html `
@@ -12,7 +11,11 @@ let MemoryCatWelcome = class MemoryCatWelcome extends LitElement {
     `;
     }
     _startFetch() {
-        const stateEvent = new MemoryCatEvent('start');
+        const stateEvent = new CustomEvent('memory-cat-event', {
+            bubbles: true,
+            composed: true,
+            detail: { type: 'start' },
+        });
         this.dispatchEvent(stateEvent);
     }
 };
