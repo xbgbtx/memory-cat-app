@@ -4,6 +4,7 @@ import { interpret } from 'xstate';
 import { memoryCatMachine } from './MemoryCatAppState.js';
 import './MemoryCatWelcome.js';
 import { MemoryCatEvent } from './MemoryCatEvent.js';
+import './MemoryCatFetch.js';
 
 const appState = interpret(memoryCatMachine);
 
@@ -67,8 +68,8 @@ export class MemoryCatApp extends LitElement {
     switch (this.stateName) {
       case 'welcome':
         return html`<mc-welcome></mc-welcome>`;
-      case 'getCards':
-        return html`<p>Getting Cards!</p>`;
+      case 'fetchCats':
+        return html`<mc-fetch></mc-fetch>`;
       default:
         return html`Error!`;
     }

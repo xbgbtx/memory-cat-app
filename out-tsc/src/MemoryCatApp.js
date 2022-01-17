@@ -4,6 +4,7 @@ import { property } from 'lit/decorators.js';
 import { interpret } from 'xstate';
 import { memoryCatMachine } from './MemoryCatAppState.js';
 import './MemoryCatWelcome.js';
+import './MemoryCatFetch.js';
 const appState = interpret(memoryCatMachine);
 function forwardAppEvent(e) {
     appState.send(e.action);
@@ -32,8 +33,8 @@ export class MemoryCatApp extends LitElement {
         switch (this.stateName) {
             case 'welcome':
                 return html `<mc-welcome></mc-welcome>`;
-            case 'getCards':
-                return html `<p>Getting Cards!</p>`;
+            case 'fetchCats':
+                return html `<mc-fetch></mc-fetch>`;
             default:
                 return html `Error!`;
         }
