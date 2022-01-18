@@ -22,7 +22,7 @@ namespace MemoryCatEvents {
 export function memoryCatsInitialContext() {
   return {
     catUrls: [],
-    gamesize: 8,
+    gamesize: 6,
   };
 }
 
@@ -43,7 +43,7 @@ function validConfig(context: MemoryCatContext) {
 }
 
 function enoughCats(context: MemoryCatContext) {
-  return context.catUrls.length >= 6;
+  return context.catUrls.length >= context.gamesize;
 }
 
 const memoryCatMachine = createMachine<MemoryCatContext>(
