@@ -4,6 +4,13 @@ export interface MemoryCatContext {
   catUrls: Array<string>;
 }
 
+namespace MemoryCatEvents {
+  export interface ReceivedCatUrl {
+    type: string;
+    catUrl: string;
+  }
+}
+
 export function memoryCatsInitialContext() {
   return {
     catUrls: [],
@@ -11,7 +18,10 @@ export function memoryCatsInitialContext() {
 }
 
 const addCatUrl = assign({
-  catUrls: (context: MemoryCatContext, event) => [...context.catUrls, 'foo'],
+  catUrls: (context: MemoryCatContext, event) => {
+    const url = (event as MemoryCatEvents.ReceivedCatUrl).catUrl;
+    return [...context.catUrls, url];
+  },
 });
 
 function enoughCats(context: MemoryCatContext) {

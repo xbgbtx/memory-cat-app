@@ -17,7 +17,7 @@ export class MemoryCatFetch extends LitElement {
     const e = new CustomEvent('memory-cat-event', {
       bubbles: true,
       composed: true,
-      detail: { type: 'RECEIVEDCATURL' },
+      detail: { type: 'RECEIVEDCATURL', catUrl: 'abc' },
     });
     this.dispatchEvent(e);
     setTimeout(() => {
