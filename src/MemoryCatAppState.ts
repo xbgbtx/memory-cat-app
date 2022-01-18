@@ -1,12 +1,17 @@
 import { createMachine, assign } from 'xstate';
 
 export interface MemoryCatContext {
+  gamesize: number;
   catUrls: Array<string>;
 }
 
 namespace MemoryCatEvents {
   interface BaseEvent {
     type: string;
+  }
+
+  export interface StartGame extends BaseEvent {
+    gamesize: number;
   }
 
   export interface ReceivedCatUrl extends BaseEvent {
@@ -17,6 +22,7 @@ namespace MemoryCatEvents {
 export function memoryCatsInitialContext() {
   return {
     catUrls: [],
+    gamesize: 0,
   };
 }
 
@@ -26,6 +32,15 @@ const addCatUrl = assign({
     return [...context.catUrls, url];
   },
 });
+
+const applyConfig = assign({
+  gamesize: (context: MemoryCatContext, event) =>
+    (event as MemoryCatEvents.StartGame).gamesize,
+});
+
+function validConfig(context: MemoryCatContext) {
+  return context.gamesize > 2 && context.gamesize <= 12;
+}
 
 function enoughCats(context: MemoryCatContext) {
   return context.catUrls.length >= 6;
@@ -38,8 +53,14 @@ const memoryCatMachine = createMachine<MemoryCatContext>(
     context: memoryCatsInitialContext(),
     states: {
       welcome: {
+        always: {
+          target: 'fetchCats',
+          cond: 'validConfig',
+        },
         on: {
-          START: { target: 'fetchCats' },
+          START: {
+            actions: 'applyConfig',
+          },
         },
       },
       fetchCats: {
@@ -58,8 +79,8 @@ const memoryCatMachine = createMachine<MemoryCatContext>(
     },
   },
   {
-    actions: { addCatUrl },
-    guards: { enoughCats },
+    actions: { addCatUrl, applyConfig },
+    guards: { enoughCats, validConfig },
   }
 );
 

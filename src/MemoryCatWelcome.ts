@@ -8,17 +8,27 @@ export class MemoryCatWelcome extends LitElement {
   render() {
     return html`
       <main>
-        <p>Click to fetch cats!</p>
-        <button @click="${this._startFetch}">Click</button>
+        <form @submit="${this._startGame}" id="options-form">
+          <label for="gamesize">Game Size:</label>
+          <select name="gamesize" id="gamesize" form="options-form">
+            <option value="small">Small</option>
+            <option value="medium">Medium</option>
+            <option value="large">Large</option>
+          </select>
+          <br />
+          <input type="submit" value="Start Game" />
+        </form>
       </main>
     `;
   }
 
-  private _startFetch() {
+  private _startGame(e: Event) {
+    e.preventDefault();
+
     const stateEvent = new CustomEvent('memory-cat-event', {
       bubbles: true,
       composed: true,
-      detail: { type: 'START' },
+      detail: { type: 'START', gamesize: 20 },
     });
     this.dispatchEvent(stateEvent);
   }
