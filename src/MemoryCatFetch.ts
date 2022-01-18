@@ -14,10 +14,11 @@ export class MemoryCatFetch extends LitElement {
   }
 
   _fetchLoop() {
+    const url = `Cat=${Math.floor(Math.random() * 1000)}`;
     const e = new CustomEvent('memory-cat-event', {
       bubbles: true,
       composed: true,
-      detail: { type: 'RECEIVEDCATURL', catUrl: 'abc' },
+      detail: { type: 'RECEIVEDCATURL', catUrl: url },
     });
     this.dispatchEvent(e);
     setTimeout(() => {
