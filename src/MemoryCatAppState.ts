@@ -5,8 +5,11 @@ export interface MemoryCatContext {
 }
 
 namespace MemoryCatEvents {
-  export interface ReceivedCatUrl {
+  interface BaseEvent {
     type: string;
+  }
+
+  export interface ReceivedCatUrl extends BaseEvent {
     catUrl: string;
   }
 }
