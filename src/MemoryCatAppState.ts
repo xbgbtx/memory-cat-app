@@ -10,7 +10,7 @@ namespace MemoryCatEvents {
     type: string;
   }
 
-  export interface StartGame extends BaseEvent {
+  export interface Config extends BaseEvent {
     gamesize: number;
   }
 
@@ -35,7 +35,7 @@ const addCatUrl = assign({
 
 const applyConfig = assign({
   gamesize: (context: MemoryCatContext, event) =>
-    (event as MemoryCatEvents.StartGame).gamesize,
+    (event as MemoryCatEvents.Config).gamesize,
 });
 
 function validConfig(context: MemoryCatContext) {
@@ -53,14 +53,19 @@ const memoryCatMachine = createMachine<MemoryCatContext>(
     context: memoryCatsInitialContext(),
     states: {
       welcome: {
-        always: {
-          target: 'fetchCats',
-          cond: 'validConfig',
-        },
         on: {
-          START: {
+          CONFIG: {
             actions: 'applyConfig',
           },
+          START: [
+            {
+              target: 'fetchCats',
+              cond: 'validConfig',
+            },
+            {
+              target: 'error',
+            },
+          ],
         },
       },
       fetchCats: {
@@ -76,6 +81,11 @@ const memoryCatMachine = createMachine<MemoryCatContext>(
         },
       },
       gameplay: {},
+      error: {
+        after: {
+          2000: { target: 'welcome' },
+        },
+      },
     },
   },
   {

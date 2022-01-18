@@ -8,7 +8,11 @@ export class MemoryCatWelcome extends LitElement {
   render() {
     return html`
       <main>
-        <form @submit="${this._startGame}" id="options-form">
+        <form
+          @submit="${this._startGame}"
+          @change="${this._applyConfig}"
+          id="options-form"
+        >
           <label for="gamesize">Game Size:</label>
           <select name="gamesize" id="gamesize" form="options-form">
             <option value="small">Small</option>
@@ -22,13 +26,23 @@ export class MemoryCatWelcome extends LitElement {
     `;
   }
 
+  private _applyConfig() {
+    console.log('config changed');
+    const stateEvent = new CustomEvent('memory-cat-event', {
+      bubbles: true,
+      composed: true,
+      detail: { type: 'CONFIG', gamesize: 20 },
+    });
+    this.dispatchEvent(stateEvent);
+  }
+
   private _startGame(e: Event) {
     e.preventDefault();
 
     const stateEvent = new CustomEvent('memory-cat-event', {
       bubbles: true,
       composed: true,
-      detail: { type: 'START', gamesize: 20 },
+      detail: { type: 'START' },
     });
     this.dispatchEvent(stateEvent);
   }
