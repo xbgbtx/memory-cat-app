@@ -22,7 +22,7 @@ namespace MemoryCatEvents {
 export function memoryCatsInitialContext() {
   return {
     catUrls: [],
-    gamesize: 0,
+    gamesize: 8,
   };
 }
 
