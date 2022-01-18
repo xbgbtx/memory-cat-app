@@ -69,6 +69,7 @@ export class MemoryCatApp extends LitElement {
         <h1>Memory Cats!</h1>
         ${this.renderApp()}
         <p>State = ${this.stateName}</p>
+        <p>Context = ${JSON.stringify(this.context)}</p>
       </main>
     `;
   }

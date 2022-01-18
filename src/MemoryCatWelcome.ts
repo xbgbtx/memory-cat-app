@@ -20,8 +20,9 @@ export class MemoryCatWelcome extends LitElement {
           <label for="gamesize">Game Size:</label>
           <select name="gamesize" id="gamesize" form="options-form">
             <option value="3">Small</option>
-            <option value="6">Medium</option>
+            <option value="6" selected="selected">Medium</option>
             <option value="8">Large</option>
+            <option value="12">Super</option>
           </select>
           <br />
           <input type="submit" value="Start Game" />
