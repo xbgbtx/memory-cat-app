@@ -1,4 +1,4 @@
-import { createMachine, assign, send } from 'xstate';
+import { createMachine, assign, send, spawn } from 'xstate';
 
 export interface MemoryCatContext {
   gamesize: number;
@@ -15,7 +15,7 @@ namespace MemoryCatEvents {
   }
 
   export interface ReceivedCatUrl extends BaseEvent {
-    catUrl: string;
+    data: string;
   }
 }
 
@@ -27,20 +27,13 @@ export function memoryCatsInitialContext() {
 }
 
 const fetchCatUrl = () => {
-  window.setTimeout(() => {
-    const url = `Cat=${Math.floor(Math.random() * 1000)}`;
-    const e = new CustomEvent('memory-cat-event', {
-      bubbles: true,
-      composed: true,
-      detail: { type: 'RECEIVEDCATURL', catUrl: url },
-    });
-    window.dispatchEvent(e);
-  }, 1000);
+  const sleep = new Promise(resolve => setTimeout(resolve, 1000));
+  return sleep.then(() => `Cat=${Math.floor(Math.random() * 1000)}`);
 };
 
 const storeCatUrl = assign({
   catUrls: (context: MemoryCatContext, event) => {
-    const url = (event as MemoryCatEvents.ReceivedCatUrl).catUrl;
+    const url = (event as MemoryCatEvents.ReceivedCatUrl).data;
     return [...context.catUrls, url];
   },
 });
@@ -81,17 +74,19 @@ const memoryCatMachine = createMachine<MemoryCatContext>(
         },
       },
       fetchCats: {
-        entry: send('STARTFETCH'),
+        entry: send('FETCH'),
         always: {
           target: 'gameplay',
           cond: 'enoughCats',
         },
-        on: {
-          STARTFETCH: {
-            actions: 'fetchCatUrl',
-          },
-          RECEIVEDCATURL: {
+        invoke: {
+          id: 'fetchCats',
+          src: fetchCatUrl,
+          onDone: {
             actions: 'storeCatUrl',
+          },
+          onError: {
+            target: 'error',
           },
         },
       },
@@ -104,7 +99,7 @@ const memoryCatMachine = createMachine<MemoryCatContext>(
     },
   },
   {
-    actions: { storeCatUrl, fetchCatUrl, applyConfig },
+    actions: { applyConfig, storeCatUrl },
     guards: { enoughCats, validConfig },
   }
 );
