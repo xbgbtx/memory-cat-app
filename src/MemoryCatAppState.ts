@@ -83,6 +83,7 @@ const memoryCatMachine = createMachine<MemoryCatContext>(
           id: 'fetchCats',
           src: fetchCatUrl,
           onDone: {
+            target: 'fetchCats',
             actions: 'storeCatUrl',
           },
           onError: {
