@@ -74,7 +74,6 @@ const memoryCatMachine = createMachine<MemoryCatContext>(
         },
       },
       fetchCats: {
-        entry: send('FETCH'),
         always: {
           target: 'gameplay',
           cond: 'enoughCats',
