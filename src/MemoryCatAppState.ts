@@ -1,4 +1,4 @@
-import { createMachine, assign } from 'xstate';
+import { createMachine, assign, send } from 'xstate';
 
 export interface MemoryCatContext {
   gamesize: number;
@@ -26,7 +26,19 @@ export function memoryCatsInitialContext() {
   };
 }
 
-const addCatUrl = assign({
+const fetchCatUrl = () => {
+  window.setTimeout(() => {
+    const url = `Cat=${Math.floor(Math.random() * 1000)}`;
+    const e = new CustomEvent('memory-cat-event', {
+      bubbles: true,
+      composed: true,
+      detail: { type: 'RECEIVEDCATURL', catUrl: url },
+    });
+    window.dispatchEvent(e);
+  }, 1000);
+};
+
+const storeCatUrl = assign({
   catUrls: (context: MemoryCatContext, event) => {
     const url = (event as MemoryCatEvents.ReceivedCatUrl).catUrl;
     return [...context.catUrls, url];
@@ -69,14 +81,17 @@ const memoryCatMachine = createMachine<MemoryCatContext>(
         },
       },
       fetchCats: {
+        entry: send('STARTFETCH'),
         always: {
           target: 'gameplay',
           cond: 'enoughCats',
         },
         on: {
+          STARTFETCH: {
+            actions: 'fetchCatUrl',
+          },
           RECEIVEDCATURL: {
-            target: 'fetchCats',
-            actions: 'addCatUrl',
+            actions: 'storeCatUrl',
           },
         },
       },
@@ -89,7 +104,7 @@ const memoryCatMachine = createMachine<MemoryCatContext>(
     },
   },
   {
-    actions: { addCatUrl, applyConfig },
+    actions: { storeCatUrl, fetchCatUrl, applyConfig },
     guards: { enoughCats, validConfig },
   }
 );
