@@ -80,6 +80,7 @@ export class MemoryCatApp extends LitElement {
         return html`<mc-welcome></mc-welcome>`;
       case 'fetchCats':
         return html`<mc-fetch
+          catsRequired="${this.context.gamesize}"
           numFetched="${this.context.catUrls.length}"
         ></mc-fetch>`;
       default:
