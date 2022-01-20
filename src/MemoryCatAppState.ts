@@ -1,9 +1,4 @@
-import { createMachine, assign, send, spawn } from 'xstate';
-
-export interface MemoryCatContext {
-  gamesize: number;
-  catUrls: Array<string>;
-}
+import { createMachine, assign } from 'xstate';
 
 namespace MemoryCatEvents {
   interface BaseEvent {
@@ -17,6 +12,11 @@ namespace MemoryCatEvents {
   export interface ReceivedCatUrl extends BaseEvent {
     data: string;
   }
+}
+
+export interface MemoryCatContext {
+  gamesize: number;
+  catUrls: Array<string>;
 }
 
 export function memoryCatsInitialContext() {
