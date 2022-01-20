@@ -1,4 +1,5 @@
 import { createMachine, assign } from 'xstate';
+import { gameplayMachine } from './GameplayService.js';
 
 namespace MemoryCatEvents {
   interface BaseEvent {
@@ -90,7 +91,10 @@ const memoryCatMachine = createMachine<MemoryCatContext>(
           },
         },
       },
-      gameplay: {},
+      gameplay: {
+        invoke: { src: gameplayMachine, onDone: 'gameover' },
+      },
+      gameover: {},
       error: {
         after: {
           2000: { target: 'welcome' },

@@ -5,7 +5,7 @@ import {
   memoryCatMachine,
   MemoryCatContext,
   memoryCatsInitialContext,
-} from './MemoryCatAppState.js';
+} from './xstate/MemoryCatAppState.js';
 import './MemoryCatWelcome.js';
 import './MemoryCatFetch.js';
 
