@@ -8,6 +8,7 @@ import {
 } from './xstate/MemoryCatAppState.js';
 import './MemoryCatWelcome.js';
 import './MemoryCatFetch.js';
+import './MemoryCatDealing.js';
 
 const appState = interpret(memoryCatMachine);
 
@@ -83,6 +84,8 @@ export class MemoryCatApp extends LitElement {
           catsRequired="${this.context.gamesize}"
           numFetched="${this.context.catUrls.length}"
         ></mc-fetch>`;
+      case 'dealing':
+        return html`<mc-dealing> </mc-dealing>`;
       default:
         return html`Error!`;
     }

@@ -1,5 +1,4 @@
 import { createMachine, assign } from 'xstate';
-import { gameplayMachine } from './GameplayService.js';
 
 namespace MemoryCatEvents {
   interface BaseEvent {
@@ -18,6 +17,7 @@ namespace MemoryCatEvents {
 export interface MemoryCatContext {
   gamesize: number;
   catUrls: Array<string>;
+  cards?: Array<string>;
 }
 
 export function memoryCatsInitialContext() {
@@ -36,6 +36,17 @@ const storeCatUrl = assign({
   catUrls: (context: MemoryCatContext, event) => {
     const url = (event as MemoryCatEvents.ReceivedCatUrl).data;
     return [...context.catUrls, url];
+  },
+});
+
+const shuffleCards = assign({
+  cards: (context: MemoryCatContext, event) => {
+    const cards = context.catUrls.reduce<Array<string>>(
+      (acc, curr) => [...acc, curr, curr],
+      []
+    );
+
+    return cards;
   },
 });
 
@@ -76,7 +87,7 @@ const memoryCatMachine = createMachine<MemoryCatContext>(
       },
       fetchCats: {
         always: {
-          target: 'gameplay',
+          target: 'dealing',
           cond: 'enoughCats',
         },
         invoke: {
@@ -91,13 +102,11 @@ const memoryCatMachine = createMachine<MemoryCatContext>(
           },
         },
       },
-      gameplay: {
-        invoke: {
-          id: 'gameplay-machine',
-          src: gameplayMachine,
-          onDone: 'gameover',
-        },
+      dealing: {
+        entry: shuffleCards,
+        on: { DEALCOMPLETE: { target: 'noSelection' } },
       },
+      noSelection: {},
       gameover: {},
       error: {
         after: {
@@ -107,7 +116,7 @@ const memoryCatMachine = createMachine<MemoryCatContext>(
     },
   },
   {
-    actions: { applyConfig, storeCatUrl },
+    actions: { applyConfig, storeCatUrl, shuffleCards },
     guards: { enoughCats, validConfig },
   }
 );
