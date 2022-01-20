@@ -40,7 +40,7 @@ const storeCatUrl = assign({
 });
 
 const shuffleCards = assign({
-  cards: (context: MemoryCatContext, event) => {
+  cards: (context: MemoryCatContext, _) => {
     const cards = context.catUrls.reduce<Array<string>>(
       (acc, curr) => [...acc, curr, curr],
       []
