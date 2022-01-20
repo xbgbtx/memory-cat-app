@@ -92,7 +92,11 @@ const memoryCatMachine = createMachine<MemoryCatContext>(
         },
       },
       gameplay: {
-        invoke: { src: gameplayMachine, onDone: 'gameover' },
+        invoke: {
+          id: 'gameplay-machine',
+          src: gameplayMachine,
+          onDone: 'gameover',
+        },
       },
       gameover: {},
       error: {
