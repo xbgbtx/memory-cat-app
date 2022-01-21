@@ -9,6 +9,18 @@ export class MemoryCatDealing extends LitElement {
 
   static styles = css``;
 
+  constructor() {
+    super();
+    window.setTimeout(() => {
+      const e = new CustomEvent('memory-cat-event', {
+        bubbles: true,
+        composed: true,
+        detail: { type: 'DEALCOMPLETE' },
+      });
+      this.dispatchEvent(e);
+    }, 2000);
+  }
+
   render() {
     return html`
       <main>
