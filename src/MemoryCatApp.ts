@@ -9,6 +9,7 @@ import {
 import './MemoryCatWelcome.js';
 import './MemoryCatFetch.js';
 import './MemoryCatDealing.js';
+import './MemoryCatCardTable.js';
 
 const appState = interpret(memoryCatMachine);
 
@@ -86,6 +87,8 @@ export class MemoryCatApp extends LitElement {
         ></mc-fetch>`;
       case 'dealing':
         return html`<mc-dealing> </mc-dealing>`;
+      case 'noSelection':
+        return html`<mc-card-table></mc-card-table>`;
       default:
         return html`Error!`;
     }
