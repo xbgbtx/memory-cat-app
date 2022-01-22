@@ -5,14 +5,15 @@ import { customElement, property } from 'lit/decorators.js';
 export class MemoryCatCardTable extends LitElement {
   @property({ type: Number }) gamesize = 0;
 
+  @property({ type: Array }) cards = [];
+
   static styles = css``;
 
   render() {
-    return html`
-      <main>
-        <p>Card Table...</p>
-        <p>Size = ${this.gamesize}</p>
-      </main>
-    `;
+    return html` <main>${this.renderCards()}</main> `;
+  }
+
+  renderCards() {
+    return this.cards.map(url => html`<div>${url}</div>`);
   }
 }
