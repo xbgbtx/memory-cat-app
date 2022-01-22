@@ -88,7 +88,10 @@ export class MemoryCatApp extends LitElement {
       case 'dealing':
         return html`<mc-dealing> </mc-dealing>`;
       case 'noSelection':
-        return html`<mc-card-table></mc-card-table>`;
+        return html`<mc-card-table
+          gamesize=${this.context.gamesize}
+          cards=${JSON.stringify(this.context.cards)}
+        ></mc-card-table>`;
       default:
         return html`Error!`;
     }
