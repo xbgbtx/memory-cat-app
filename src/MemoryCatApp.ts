@@ -85,13 +85,8 @@ export class MemoryCatApp extends LitElement {
           catsRequired="${this.context.gamesize}"
           numFetched="${this.context.catUrls.length}"
         ></mc-fetch>`;
-      case 'dealing':
-        return html`<mc-dealing> </mc-dealing>`;
       case 'cardTable':
-        return html`<mc-card-table
-          gamesize=${this.context.gamesize}
-          cards=${JSON.stringify(this.context.cards)}
-        ></mc-card-table>`;
+        return html`<mc-card-table></mc-card-table>`;
       default:
         return html`Error!`;
     }

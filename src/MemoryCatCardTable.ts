@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { MemoryCatEvents, Card } from './xstate/MemoryCatAppState.js';
 
 @customElement('mc-card-table')
 export class MemoryCatCardTable extends LitElement {
@@ -41,6 +42,13 @@ export class MemoryCatCardTable extends LitElement {
 
   render() {
     return html` <main>${this.renderCards()}</main> `;
+  }
+
+  constructor() {
+    super();
+    this.addEventListener('memory-cat-event', (e: Event) => {
+      console.log(e);
+    });
   }
 
   /**

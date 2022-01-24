@@ -1,7 +1,7 @@
 import { createMachine, assign, send, sendParent } from 'xstate';
 
-namespace MemoryCatEvents {
-  interface BaseEvent {
+export namespace MemoryCatEvents {
+  export interface BaseEvent {
     type: string;
   }
 
@@ -13,19 +13,24 @@ namespace MemoryCatEvents {
     data: string;
   }
 
-  export interface Shuffle extends BaseEvent {
-    catUrls: Array<string>;
+  export interface TableUpdated extends BaseEvent {
+    cards: Array<Card>;
   }
 }
 
 export interface MemoryCatContext {
   gamesize: number;
   catUrls: Array<string>;
-  cards?: Array<string>;
 }
 
 export interface CardTableContext {
-  cards: Array<string>;
+  cards: Array<Card>;
+}
+
+export interface Card {
+  imageUrl: string;
+  dealt: boolean;
+  revealed: boolean;
 }
 
 export function memoryCatsInitialContext() {
@@ -33,6 +38,15 @@ export function memoryCatsInitialContext() {
     catUrls: [],
     gamesize: 6,
   };
+}
+
+function sendGlobal(detail: MemoryCatEvents.BaseEvent) {
+  const stateEvent = new CustomEvent('memory-cat-event', {
+    bubbles: true,
+    composed: true,
+    detail: detail,
+  });
+  document.dispatchEvent(stateEvent);
 }
 
 const fetchCatUrl = () => {
@@ -48,7 +62,15 @@ const storeCatUrl = assign({
 });
 
 function createCards(catUrls: Array<string>) {
-  return catUrls.reduce<Array<string>>((acc, curr) => [...acc, curr, curr], []);
+  const card = (url: string) => ({
+    imageUrl: url,
+    dealt: false,
+    revealed: false,
+  });
+  return catUrls.reduce<Array<Card>>(
+    (acc, curr) => [...acc, card(curr), card(curr)],
+    []
+  );
 }
 
 const applyConfig = assign({
@@ -70,6 +92,10 @@ const cardTableMachine = createMachine<CardTableContext>({
   states: {
     dealing: {
       entry: () => console.log('Card table dealing'),
+      after: { 1000: { target: 'ready' } },
+    },
+    ready: {
+      entry: sendParent('TABLEUPDATED'),
     },
   },
 });
@@ -119,6 +145,11 @@ const memoryCatMachine = createMachine<MemoryCatContext>(
           data: {
             cards: (context: MemoryCatContext, _: Event) =>
               createCards(context.catUrls),
+          },
+        },
+        on: {
+          TABLEUPDATED: {
+            actions: (context: MemoryCatContext, e) => console.log(e),
           },
         },
       },
