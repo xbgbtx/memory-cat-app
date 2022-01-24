@@ -40,16 +40,7 @@ export class MemoryCatCardTable extends LitElement {
   `;
 
   render() {
-    return html`
-      <main>
-        <div
-          class="card-table"
-          style="grid-template-columns: repeat(${this.numColumns()}, 1fr)"
-        >
-          ${this.renderCards()}
-        </div>
-      </main>
-    `;
+    return html` <main>${this.renderCards()}</main> `;
   }
 
   /**
@@ -66,6 +57,14 @@ export class MemoryCatCardTable extends LitElement {
   }
 
   renderCards() {
-    return this.cards.map(url => html`<div class="card">${url}</div>`);
+    if (this.cards == null || this.cards.length == 0) return html``;
+    return html`
+      <div
+        class="card-table"
+        style="grid-template-columns: repeat(${this.numColumns()}, 1fr)"
+      >
+        ${this.cards.map(url => html`<div class="card">${url}</div>`)}
+      </div>
+    `;
   }
 }

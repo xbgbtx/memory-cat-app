@@ -87,7 +87,7 @@ export class MemoryCatApp extends LitElement {
         ></mc-fetch>`;
       case 'dealing':
         return html`<mc-dealing> </mc-dealing>`;
-      case 'noSelection':
+      case 'cardTable':
         return html`<mc-card-table
           gamesize=${this.context.gamesize}
           cards=${JSON.stringify(this.context.cards)}
