@@ -40,15 +40,6 @@ export function memoryCatsInitialContext() {
   };
 }
 
-function sendGlobal(detail: MemoryCatEvents.BaseEvent) {
-  const stateEvent = new CustomEvent('memory-cat-event', {
-    bubbles: false,
-    composed: true,
-    detail: detail,
-  });
-  window.dispatchEvent(stateEvent);
-}
-
 const fetchCatUrl = () => {
   const sleep = new Promise(resolve => setTimeout(resolve, 1000));
   return sleep.then(() => `Cat=${Math.floor(Math.random() * 1000)}`);

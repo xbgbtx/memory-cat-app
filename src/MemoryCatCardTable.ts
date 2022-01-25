@@ -44,13 +44,6 @@ export class MemoryCatCardTable extends LitElement {
     return html` <main>${this.renderCards()}</main> `;
   }
 
-  constructor() {
-    super();
-    this.addEventListener('memory-cat-event', (e: Event) => {
-      console.log(e);
-    });
-  }
-
   /**
    * Number of columns to display cards -- must fill all rows.
    */
