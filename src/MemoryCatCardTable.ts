@@ -45,7 +45,12 @@ export class MemoryCatCardTable extends LitElement {
 
     window.addEventListener(
       'TABLEUPDATED',
-      e => console.log('Table update event caught'),
+      (e: Event) => {
+        const detail: MemoryCatEvents.BaseEvent = (e as CustomEvent).detail;
+        const cards: Array<Card> = (detail as MemoryCatEvents.TableUpdated)
+          .cards;
+        this.cards = cards;
+      },
       false
     );
   }
