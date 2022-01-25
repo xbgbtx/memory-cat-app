@@ -70,7 +70,7 @@ export class MemoryCatApp extends LitElement {
       window.dispatchEvent(stateEvent);
     });
     appState.start();
-    this.addEventListener('memory-cat-event', forwardAppEvent);
+    window.addEventListener('memory-cat-event', forwardAppEvent);
   }
 
   render() {

@@ -42,7 +42,7 @@ export class MemoryCatWelcome extends LitElement {
       composed: true,
       detail: { type: 'CONFIG', gamesize },
     });
-    this.dispatchEvent(stateEvent);
+    window.dispatchEvent(stateEvent);
   }
 
   private _startGame(e: Event) {
@@ -53,6 +53,6 @@ export class MemoryCatWelcome extends LitElement {
       composed: true,
       detail: { type: 'START' },
     });
-    this.dispatchEvent(stateEvent);
+    window.dispatchEvent(stateEvent);
   }
 }
