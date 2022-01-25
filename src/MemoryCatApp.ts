@@ -56,7 +56,7 @@ export class MemoryCatApp extends LitElement {
 
     this.context = memoryCatsInitialContext();
 
-    appState.onTransition(state => {
+    appState.onTransition((state, e) => {
       const s = JSON.stringify(state.value);
       this.stateName = s.replace(/"/g, '');
       this.context = state.context;

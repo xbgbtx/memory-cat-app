@@ -42,11 +42,11 @@ export function memoryCatsInitialContext() {
 
 function sendGlobal(detail: MemoryCatEvents.BaseEvent) {
   const stateEvent = new CustomEvent('memory-cat-event', {
-    bubbles: true,
+    bubbles: false,
     composed: true,
     detail: detail,
   });
-  document.dispatchEvent(stateEvent);
+  window.dispatchEvent(stateEvent);
 }
 
 const fetchCatUrl = () => {
@@ -95,7 +95,11 @@ const cardTableMachine = createMachine<CardTableContext>({
       after: { 1000: { target: 'ready' } },
     },
     ready: {
-      entry: sendParent('TABLEUPDATED'),
+      //entry: sendParent('TABLEUPDATED'),
+      entry: sendParent((context: CardTableContext, _) => ({
+        type: 'TABLEUPDATED',
+        cards: context.cards,
+      })),
     },
   },
 });
@@ -145,11 +149,6 @@ const memoryCatMachine = createMachine<MemoryCatContext>(
           data: {
             cards: (context: MemoryCatContext, _: Event) =>
               createCards(context.catUrls),
-          },
-        },
-        on: {
-          TABLEUPDATED: {
-            actions: (context: MemoryCatContext, e) => console.log(e),
           },
         },
       },
