@@ -6,7 +6,7 @@ import { MemoryCatEvents, Card } from './xstate/MemoryCatAppState.js';
 export class MemoryCatCardTable extends LitElement {
   @property({ type: Number }) gamesize = 0;
 
-  @property({ type: Array }) cards = [];
+  @property({ type: Array }) cards: Array<Card> = [];
 
   static styles = css`
     main {
@@ -71,7 +71,7 @@ export class MemoryCatCardTable extends LitElement {
         class="card-table"
         style="grid-template-columns: repeat(${this.numColumns()}, 1fr)"
       >
-        ${this.cards.map(url => html`<div class="card">${url}</div>`)}
+        ${this.cards.map(c => html`<div class="card">${c.imageUrl}</div>`)}
       </div>
     `;
   }
