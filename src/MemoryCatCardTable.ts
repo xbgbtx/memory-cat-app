@@ -40,6 +40,16 @@ export class MemoryCatCardTable extends LitElement {
     }
   `;
 
+  constructor() {
+    super();
+
+    window.addEventListener(
+      'TABLEUPDATED',
+      e => console.log('Table update event caught'),
+      false
+    );
+  }
+
   render() {
     return html` <main>${this.renderCards()}</main> `;
   }

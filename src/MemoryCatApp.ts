@@ -5,6 +5,7 @@ import {
   memoryCatMachine,
   MemoryCatContext,
   memoryCatsInitialContext,
+  MemoryCatEvents,
 } from './xstate/MemoryCatAppState.js';
 import './MemoryCatWelcome.js';
 import './MemoryCatFetch.js';
@@ -56,10 +57,17 @@ export class MemoryCatApp extends LitElement {
 
     this.context = memoryCatsInitialContext();
 
-    appState.onTransition((state, e) => {
+    appState.onTransition((state, e: MemoryCatEvents.BaseEvent) => {
       const s = JSON.stringify(state.value);
       this.stateName = s.replace(/"/g, '');
       this.context = state.context;
+
+      //forward events for components that are listening
+      const stateEvent = new CustomEvent(e.type, {
+        composed: true,
+        detail: e,
+      });
+      window.dispatchEvent(stateEvent);
     });
     appState.start();
     this.addEventListener('memory-cat-event', forwardAppEvent);
