@@ -24,19 +24,25 @@ export class MemoryCatCardTable extends LitElement {
 
     .card-table {
       display: grid;
-      grid-template-rows: repeat(auto-fill, 1fr);
+      grid-gap: 1rem;
+      height: auto;
+    }
+
+    .card-container {
+      aspect-ratio: 1 / 1.6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .card {
-      aspect-ratio: 1 / 1.6;
-      margin: 8px;
       border: 5px ridge #8275be;
       border-radius: 27px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      justify-content: center;
+      height: 90%;
+    }
+
+    .card.undealt {
+      display: hidden;
     }
   `;
 
@@ -79,7 +85,15 @@ export class MemoryCatCardTable extends LitElement {
         class="card-table"
         style="grid-template-columns: repeat(${this.numColumns()}, 1fr)"
       >
-        ${this.cards.map(c => html`<div class="card">${c.imageUrl}</div>`)}
+        ${this.cards.map(
+          c => html`
+            <div class="card-container">
+              <div class=${'card' + (c.dealt ? '' : ' undealt')}>
+                ${c.imageUrl}
+              </div>
+            </div>
+          `
+        )}
       </div>
     `;
   }
