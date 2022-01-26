@@ -101,6 +101,7 @@ const cardTableMachine = createMachine<CardTableContext>(
   {
     id: 'card-table',
     initial: 'dealing',
+    context: { cards: [] },
     states: {
       dealing: {
         entry: 'cardsUpdated',
