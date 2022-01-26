@@ -75,6 +75,11 @@ const dealCard = assign({
   },
 });
 
+const cardsUpdated = sendParent((context: CardTableContext, _) => ({
+  type: 'TABLEUPDATED',
+  cards: context.cards,
+}));
+
 const applyConfig = assign({
   gamesize: (context: MemoryCatContext, e) =>
     (e as MemoryCatEvents.Config).gamesize,
@@ -98,10 +103,7 @@ const cardTableMachine = createMachine<CardTableContext>(
     initial: 'dealing',
     states: {
       dealing: {
-        entry: sendParent((context: CardTableContext, _) => ({
-          type: 'TABLEUPDATED',
-          cards: context.cards,
-        })),
+        entry: 'cardsUpdated',
         always: {
           target: 'ready',
           cond: 'allCardsDealt',
@@ -109,15 +111,12 @@ const cardTableMachine = createMachine<CardTableContext>(
         after: { 150: { actions: 'dealCard', target: 'dealing' } },
       },
       ready: {
-        entry: sendParent((context: CardTableContext, _) => ({
-          type: 'TABLEUPDATED',
-          cards: context.cards,
-        })),
+        entry: 'cardsUpdated',
       },
     },
   },
   {
-    actions: { dealCard },
+    actions: { dealCard, cardsUpdated },
     guards: { allCardsDealt },
   }
 );
