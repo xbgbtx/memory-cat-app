@@ -26,23 +26,21 @@ export class MemoryCatCardTable extends LitElement {
       display: grid;
       grid-gap: 1rem;
       height: auto;
+      width: 100%;
     }
 
-    .card-container {
+    .card {
       aspect-ratio: 1 / 1.6;
       display: flex;
       justify-content: center;
       align-items: center;
-    }
-
-    .card {
       border: 5px ridge #8275be;
       border-radius: 27px;
-      height: 90%;
+      height: 100%;
     }
 
     .card.undealt {
-      display: hidden;
+      visibility: hidden;
     }
   `;
 
@@ -87,10 +85,10 @@ export class MemoryCatCardTable extends LitElement {
       >
         ${this.cards.map(
           c => html`
-            <div class="card-container">
-              <div class=${'card' + (c.dealt ? '' : ' undealt')}>
-                ${c.imageUrl}
-              </div>
+            <div class=${'card' + (c.dealt ? '' : ' undealt')}>
+              ${c.revealed
+                ? html`<div>c.imageUrl</div>`
+                : html`<div>Card Back</div>`}
             </div>
           `
         )}
