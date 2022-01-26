@@ -64,10 +64,25 @@ function createCards(catUrls: Array<string>) {
   );
 }
 
+const dealCard = assign({
+  cards: (context: CardTableContext, _) => {
+    let cardDealt = false;
+    return context.cards.reduce<Array<Card>>((prev, next) => {
+      if (cardDealt || next.dealt) return [...prev, next];
+      cardDealt = true;
+      return [...prev, { ...next, dealt: true }];
+    }, []);
+  },
+});
+
 const applyConfig = assign({
   gamesize: (context: MemoryCatContext, e) =>
     (e as MemoryCatEvents.Config).gamesize,
 });
+
+function allCardsDealt(context: CardTableContext) {
+  return context.cards.filter(c => !c.dealt).length == 0;
+}
 
 function validConfig(context: MemoryCatContext) {
   return context.gamesize > 2 && context.gamesize <= 12;
@@ -77,23 +92,35 @@ function enoughCats(context: MemoryCatContext) {
   return context.catUrls.length >= context.gamesize;
 }
 
-const cardTableMachine = createMachine<CardTableContext>({
-  id: 'card-table',
-  initial: 'dealing',
-  states: {
-    dealing: {
-      entry: () => console.log('Card table dealing'),
-      after: { 1000: { target: 'ready' } },
-    },
-    ready: {
-      //entry: sendParent('TABLEUPDATED'),
-      entry: sendParent((context: CardTableContext, _) => ({
-        type: 'TABLEUPDATED',
-        cards: context.cards,
-      })),
+const cardTableMachine = createMachine<CardTableContext>(
+  {
+    id: 'card-table',
+    initial: 'dealing',
+    states: {
+      dealing: {
+        entry: sendParent((context: CardTableContext, _) => ({
+          type: 'TABLEUPDATED',
+          cards: context.cards,
+        })),
+        always: {
+          target: 'ready',
+          cond: 'allCardsDealt',
+        },
+        after: { 150: { actions: 'dealCard', target: 'dealing' } },
+      },
+      ready: {
+        entry: sendParent((context: CardTableContext, _) => ({
+          type: 'TABLEUPDATED',
+          cards: context.cards,
+        })),
+      },
     },
   },
-});
+  {
+    actions: { dealCard },
+    guards: { allCardsDealt },
+  }
+);
 
 const memoryCatMachine = createMachine<MemoryCatContext>(
   {
