@@ -1,8 +1,8 @@
 import { LitElement, html, css } from 'lit';
 import { property } from 'lit/decorators.js';
-import { interpret } from 'xstate';
+import { State } from 'xstate';
 import {
-  memoryCatMachine,
+  memoryCatAppState,
   memoryCatsInitialContext,
 } from './xstate/MemoryCatAppState.js';
 import {
@@ -14,10 +14,8 @@ import './MemoryCatFetch.js';
 import './MemoryCatDealing.js';
 import './MemoryCatCardTable.js';
 
-const appState = interpret(memoryCatMachine);
-
 function forwardAppEvent(e: Event) {
-  appState.send((e as CustomEvent).detail);
+  memoryCatAppState.send((e as CustomEvent).detail);
 }
 
 export function dispatchMCEvent(e: MemoryCatEvents.BaseEvent) {
@@ -69,19 +67,21 @@ export class MemoryCatApp extends LitElement {
 
     this.context = memoryCatsInitialContext();
 
-    appState.onTransition((state, e: MemoryCatEvents.BaseEvent) => {
-      const s = JSON.stringify(state.value);
-      this.stateName = s.replace(/"/g, '');
-      this.context = state.context;
+    memoryCatAppState.onTransition(
+      (state: State<MemoryCatContext>, e: MemoryCatEvents.BaseEvent) => {
+        const s = JSON.stringify(state.value);
+        this.stateName = s.replace(/"/g, '');
+        this.context = state.context;
 
-      //forward events for components that are listening
-      const stateEvent = new CustomEvent(e.type, {
-        composed: true,
-        detail: e,
-      });
-      window.dispatchEvent(stateEvent);
-    });
-    appState.start();
+        //forward events for components that are listening
+        const stateEvent = new CustomEvent(e.type, {
+          composed: true,
+          detail: e,
+        });
+        window.dispatchEvent(stateEvent);
+      }
+    );
+    memoryCatAppState.start();
     window.addEventListener('memory-cat-event', forwardAppEvent);
   }
 

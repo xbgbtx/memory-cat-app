@@ -1,4 +1,4 @@
-import { createMachine, assign, send, sendParent } from 'xstate';
+import { createMachine, assign, send, interpret } from 'xstate';
 import {
   MemoryCatContext,
   MemoryCatEvents,
@@ -119,4 +119,6 @@ const memoryCatMachine = createMachine<MemoryCatContext>(
   }
 );
 
-export { memoryCatMachine };
+const memoryCatAppState = interpret(memoryCatMachine);
+
+export { memoryCatAppState };
