@@ -17,6 +17,14 @@ const dealCard = assign({
   },
 });
 
+const handleCardClick = assign({
+  cards: (context: CardTableContext, e) => {
+    const cardIdx = (e as MemoryCatEvents.CardClicked).card;
+    console.log(`Clicked card ${cardIdx}`);
+    return context.cards;
+  },
+});
+
 const cardsUpdated = sendParent((context: CardTableContext, _) => ({
   type: 'TABLEUPDATED',
   cards: context.cards,
@@ -28,7 +36,7 @@ function allCardsDealt(context: CardTableContext) {
 
 export const cardTableMachine = createMachine<CardTableContext>(
   {
-    id: 'card-table',
+    id: 'cardTable',
     initial: 'dealing',
     context: { cards: [], userPicks: [] },
     states: {
@@ -42,11 +50,12 @@ export const cardTableMachine = createMachine<CardTableContext>(
       },
       ready: {
         entry: 'cardsUpdated',
+        on: { CARDCLICKED: { actions: 'handleCardClick', target: 'ready' } },
       },
     },
   },
   {
-    actions: { dealCard, cardsUpdated },
+    actions: { dealCard, cardsUpdated, handleCardClick },
     guards: { allCardsDealt },
   }
 );

@@ -93,11 +93,17 @@ const memoryCatMachine = createMachine<MemoryCatContext>(
       cardTable: {
         invoke: {
           src: cardTableMachine,
+          id: 'cardTableMachine',
           data: {
             cards: (context: MemoryCatContext, _: Event) =>
               createCards(context.catUrls),
           },
         },
+        // on: {
+        //   CARDCLICKED: {
+        //     actions: send('CARDCLICKED', { to: 'cardTableMachine' }),
+        //   },
+        // },
       },
       gameover: {},
       error: {
