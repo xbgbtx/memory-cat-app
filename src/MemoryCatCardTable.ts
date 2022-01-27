@@ -78,14 +78,19 @@ export class MemoryCatCardTable extends LitElement {
 
   renderCards() {
     if (this.cards == null || this.cards.length == 0) return html``;
+
+    const cardClicked = (idx: number) => console.log(`Card ${idx}`);
     return html`
       <div
         class="card-table"
         style="grid-template-columns: repeat(${this.numColumns()}, 1fr)"
       >
         ${this.cards.map(
-          c => html`
-            <div class=${'card' + (c.dealt ? '' : ' undealt')}>
+          (c, idx) => html`
+            <div
+              @click="${() => cardClicked(idx)}"
+              class=${'card' + (c.dealt ? '' : ' undealt')}
+            >
               ${c.revealed
                 ? html`<div>c.imageUrl</div>`
                 : html`<div>Card Back</div>`}
