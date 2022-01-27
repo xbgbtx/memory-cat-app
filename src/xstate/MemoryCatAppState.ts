@@ -25,6 +25,7 @@ export interface MemoryCatContext {
 
 export interface CardTableContext {
   cards: Array<Card>;
+  userPicks: Array<number>;
 }
 
 export interface Card {
@@ -101,7 +102,7 @@ const cardTableMachine = createMachine<CardTableContext>(
   {
     id: 'card-table',
     initial: 'dealing',
-    context: { cards: [] },
+    context: { cards: [], userPicks: [] },
     states: {
       dealing: {
         entry: 'cardsUpdated',
