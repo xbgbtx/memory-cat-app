@@ -1,6 +1,6 @@
 import { html, TemplateResult } from 'lit';
 import '../src/MemoryCatCardTable.js';
-import { Card } from '../src/xstate/MemoryCatAppState.js';
+import { Card } from '../src/xstate/MemoryCatAppTypes.js';
 
 export default {
   title: 'card table',

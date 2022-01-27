@@ -3,10 +3,12 @@ import { property } from 'lit/decorators.js';
 import { interpret } from 'xstate';
 import {
   memoryCatMachine,
-  MemoryCatContext,
   memoryCatsInitialContext,
-  MemoryCatEvents,
 } from './xstate/MemoryCatAppState.js';
+import {
+  MemoryCatContext,
+  MemoryCatEvents,
+} from './xstate/MemoryCatAppTypes.js';
 import './MemoryCatWelcome.js';
 import './MemoryCatFetch.js';
 import './MemoryCatDealing.js';

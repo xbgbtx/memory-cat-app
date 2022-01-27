@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { MemoryCatEvents, Card } from './xstate/MemoryCatAppState.js';
+import { MemoryCatEvents, Card } from './xstate/MemoryCatAppTypes.js';
 
 @customElement('mc-card-table')
 export class MemoryCatCardTable extends LitElement {
