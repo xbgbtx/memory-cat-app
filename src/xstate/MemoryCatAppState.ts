@@ -99,11 +99,6 @@ const memoryCatMachine = createMachine<MemoryCatContext>(
               createCards(context.catUrls),
           },
         },
-        // on: {
-        //   CARDCLICKED: {
-        //     actions: send('CARDCLICKED', { to: 'cardTableMachine' }),
-        //   },
-        // },
       },
       gameover: {},
       error: {
@@ -119,6 +114,12 @@ const memoryCatMachine = createMachine<MemoryCatContext>(
   }
 );
 
-const memoryCatAppState = interpret(memoryCatMachine);
+const memoryCatAppState = interpret(memoryCatMachine).onTransition(
+  (state, e) => {
+    if (state.value == 'cardTable' && state.children.cardTableMachine != null) {
+      state.children.cardTableMachine.send(e);
+    }
+  }
+);
 
 export { memoryCatAppState };

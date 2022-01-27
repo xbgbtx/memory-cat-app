@@ -36,7 +36,7 @@ function allCardsDealt(context: CardTableContext) {
 
 export const cardTableMachine = createMachine<CardTableContext>(
   {
-    id: 'cardTable',
+    id: 'cardTableMachine',
     initial: 'dealing',
     context: { cards: [], userPicks: [] },
     states: {
