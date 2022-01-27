@@ -1,5 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { customElement } from 'lit/decorators.js';
+import { MemoryCatEvents } from './xstate/MemoryCatAppTypes.js';
+import { dispatchMCEvent } from './MemoryCatApp.js';
 
 interface ConfigElements extends HTMLCollection {
   gamesize: HTMLInputElement;
@@ -37,22 +39,12 @@ export class MemoryCatWelcome extends LitElement {
     ) as HTMLFormElement;
     const configElements = configForm.elements as ConfigElements;
     const gamesize = parseInt(configElements.gamesize.value, 10);
-    const stateEvent = new CustomEvent('memory-cat-event', {
-      bubbles: true,
-      composed: true,
-      detail: { type: 'CONFIG', gamesize },
-    });
-    window.dispatchEvent(stateEvent);
+    dispatchMCEvent({ type: 'CONFIG', gamesize } as MemoryCatEvents.Config);
   }
 
   private _startGame(e: Event) {
     e.preventDefault();
 
-    const stateEvent = new CustomEvent('memory-cat-event', {
-      bubbles: true,
-      composed: true,
-      detail: { type: 'START' },
-    });
-    window.dispatchEvent(stateEvent);
+    dispatchMCEvent({ type: 'START' });
   }
 }

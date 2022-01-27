@@ -20,6 +20,16 @@ function forwardAppEvent(e: Event) {
   appState.send((e as CustomEvent).detail);
 }
 
+export function dispatchMCEvent(e: MemoryCatEvents.BaseEvent) {
+  window.dispatchEvent(
+    new CustomEvent('memory-cat-event', {
+      bubbles: true,
+      composed: true,
+      detail: e,
+    })
+  );
+}
+
 export class MemoryCatApp extends LitElement {
   @property({ type: String }) stateName = '';
 
