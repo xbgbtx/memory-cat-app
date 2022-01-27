@@ -5,6 +5,7 @@ import {
   CardTableContext,
   Card,
 } from './MemoryCatAppTypes.js';
+import { cardTableMachine } from './CardTableState.js';
 
 export function memoryCatsInitialContext() {
   return {
@@ -37,30 +38,10 @@ function createCards(catUrls: Array<string>) {
   );
 }
 
-const dealCard = assign({
-  cards: (context: CardTableContext, _) => {
-    let cardDealt = false;
-    return context.cards.reduce<Array<Card>>((prev, next) => {
-      if (cardDealt || next.dealt) return [...prev, next];
-      cardDealt = true;
-      return [...prev, { ...next, dealt: true }];
-    }, []);
-  },
-});
-
-const cardsUpdated = sendParent((context: CardTableContext, _) => ({
-  type: 'TABLEUPDATED',
-  cards: context.cards,
-}));
-
 const applyConfig = assign({
   gamesize: (context: MemoryCatContext, e) =>
     (e as MemoryCatEvents.Config).gamesize,
 });
-
-function allCardsDealt(context: CardTableContext) {
-  return context.cards.filter(c => !c.dealt).length == 0;
-}
 
 function validConfig(context: MemoryCatContext) {
   return context.gamesize > 2 && context.gamesize <= 12;
@@ -69,31 +50,6 @@ function validConfig(context: MemoryCatContext) {
 function enoughCats(context: MemoryCatContext) {
   return context.catUrls.length >= context.gamesize;
 }
-
-const cardTableMachine = createMachine<CardTableContext>(
-  {
-    id: 'card-table',
-    initial: 'dealing',
-    context: { cards: [], userPicks: [] },
-    states: {
-      dealing: {
-        entry: 'cardsUpdated',
-        always: {
-          target: 'ready',
-          cond: 'allCardsDealt',
-        },
-        after: { 150: { actions: 'dealCard', target: 'dealing' } },
-      },
-      ready: {
-        entry: 'cardsUpdated',
-      },
-    },
-  },
-  {
-    actions: { dealCard, cardsUpdated },
-    guards: { allCardsDealt },
-  }
-);
 
 const memoryCatMachine = createMachine<MemoryCatContext>(
   {
