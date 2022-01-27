@@ -14,6 +14,10 @@ export namespace MemoryCatEvents {
   export interface TableUpdated extends BaseEvent {
     cards: Array<Card>;
   }
+
+  export interface CardClicked extends BaseEvent {
+    card: number;
+  }
 }
 
 export interface MemoryCatContext {
