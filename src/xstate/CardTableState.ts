@@ -17,22 +17,31 @@ const dealCard = assign({
   },
 });
 
-const handleCardClick = assign({
-  cards: (context: CardTableContext, e) => {
-    const cardIdx = (e as MemoryCatEvents.CardClicked).card;
-    console.log(`Clicked card ${cardIdx}`);
-    return context.cards;
-  },
-});
+function allCardsDealt(context: CardTableContext) {
+  return context.cards.filter(c => !c.dealt).length == 0;
+}
 
 const cardsUpdated = sendParent((context: CardTableContext, _) => ({
   type: 'TABLEUPDATED',
   cards: context.cards,
 }));
 
-function allCardsDealt(context: CardTableContext) {
-  return context.cards.filter(c => !c.dealt).length == 0;
+function clickedCardAlreadyRevealed(
+  context: CardTableContext,
+  e: MemoryCatEvents.BaseEvent
+) {
+  return context.cards[(e as MemoryCatEvents.CardClicked).card].revealed;
 }
+
+const revealClickedCard = assign({
+  cards: (context: CardTableContext, e) => {
+    const clickedIdx = (e as MemoryCatEvents.CardClicked).card;
+    console.log(`Clicked card ${clickedIdx}`);
+    return context.cards.map((card, idx) =>
+      idx == clickedIdx ? { ...card, revealed: true } : card
+    );
+  },
+});
 
 export const cardTableMachine = createMachine<CardTableContext>(
   {
@@ -50,12 +59,20 @@ export const cardTableMachine = createMachine<CardTableContext>(
       },
       ready: {
         entry: 'cardsUpdated',
-        on: { CARDCLICKED: { actions: 'handleCardClick', target: 'ready' } },
+        on: {
+          CARDCLICKED: [
+            {
+              actions: () => console.log('Already revealed'),
+              cond: 'clickedCardAlreadyRevealed',
+            },
+            { actions: 'revealClickedCard', target: 'ready' },
+          ],
+        },
       },
     },
   },
   {
-    actions: { dealCard, cardsUpdated, handleCardClick },
-    guards: { allCardsDealt },
+    actions: { dealCard, cardsUpdated, revealClickedCard },
+    guards: { allCardsDealt, clickedCardAlreadyRevealed },
   }
 );

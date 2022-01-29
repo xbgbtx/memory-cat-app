@@ -98,7 +98,7 @@ export class MemoryCatCardTable extends LitElement {
               class=${'card' + (c.dealt ? '' : ' undealt')}
             >
               ${c.revealed
-                ? html`<div>c.imageUrl</div>`
+                ? html`<div>${c.imageUrl}</div>`
                 : html`<div>Card Back</div>`}
             </div>
           `
