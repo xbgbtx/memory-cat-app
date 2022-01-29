@@ -33,7 +33,18 @@ function clickedCardAlreadyRevealed(
   return context.cards[(e as MemoryCatEvents.CardClicked).card].revealed;
 }
 
+function maxCardsPicked(
+  context: CardTableContext,
+  e: MemoryCatEvents.BaseEvent
+) {
+  return context.userPicks.length >= 2;
+}
+
 const revealClickedCard = assign({
+  userPicks: (context: CardTableContext, e) => [
+    ...context.userPicks,
+    (e as MemoryCatEvents.CardClicked).card,
+  ],
   cards: (context: CardTableContext, e) => {
     const clickedIdx = (e as MemoryCatEvents.CardClicked).card;
     return context.cards.map((card, idx) =>
@@ -63,6 +74,9 @@ export const cardTableMachine = createMachine<CardTableContext>(
             {
               cond: 'clickedCardAlreadyRevealed',
             },
+            {
+              cond: 'maxCardsPicked',
+            },
             { actions: 'revealClickedCard', target: 'ready' },
           ],
         },
@@ -71,6 +85,6 @@ export const cardTableMachine = createMachine<CardTableContext>(
   },
   {
     actions: { dealCard, cardsUpdated, revealClickedCard },
-    guards: { allCardsDealt, clickedCardAlreadyRevealed },
+    guards: { allCardsDealt, clickedCardAlreadyRevealed, maxCardsPicked },
   }
 );

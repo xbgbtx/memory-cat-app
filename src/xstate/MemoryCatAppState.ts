@@ -95,6 +95,7 @@ const memoryCatMachine = createMachine<MemoryCatContext>(
           src: cardTableMachine,
           id: 'cardTableMachine',
           data: {
+            userPicks: [],
             cards: (context: MemoryCatContext, _: Event) =>
               createCards(context.catUrls),
           },
