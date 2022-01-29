@@ -36,7 +36,6 @@ function clickedCardAlreadyRevealed(
 const revealClickedCard = assign({
   cards: (context: CardTableContext, e) => {
     const clickedIdx = (e as MemoryCatEvents.CardClicked).card;
-    console.log(`Clicked card ${clickedIdx}`);
     return context.cards.map((card, idx) =>
       idx == clickedIdx ? { ...card, revealed: true } : card
     );
@@ -62,7 +61,6 @@ export const cardTableMachine = createMachine<CardTableContext>(
         on: {
           CARDCLICKED: [
             {
-              actions: () => console.log('Already revealed'),
               cond: 'clickedCardAlreadyRevealed',
             },
             { actions: 'revealClickedCard', target: 'ready' },
