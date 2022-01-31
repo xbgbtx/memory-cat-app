@@ -57,17 +57,6 @@ export class MemoryCatCardTable extends LitElement {
     super();
 
     window.addEventListener(
-      'TABLEUPDATED',
-      (e: Event) => {
-        const detail: MemoryCatEvents.BaseEvent = (e as CustomEvent).detail;
-        const cards: Array<Card> = (detail as MemoryCatEvents.TableUpdated)
-          .cards;
-        this.cards = cards;
-      },
-      false
-    );
-
-    window.addEventListener(
       'cardDealt',
       (e: Event) => {
         const detail: MemoryCatEvents.BaseEvent = (e as CustomEvent).detail;
