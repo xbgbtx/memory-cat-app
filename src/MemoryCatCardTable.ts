@@ -39,6 +39,14 @@ export class MemoryCatCardTable extends LitElement {
       border-radius: 27px;
       height: 100%;
     }
+    @keyframes dealing {
+      0% {
+        transform: translate(50px, 1000px);
+      }
+      100% {
+        transform: translate(0px, 0px);
+      }
+    }
 
     .card.undealt {
       visibility: hidden;
