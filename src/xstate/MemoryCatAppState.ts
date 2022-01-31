@@ -15,7 +15,7 @@ export function memoryCatsInitialContext() {
 }
 
 const fetchCatUrl = () => {
-  const sleep = new Promise(resolve => setTimeout(resolve, 1000));
+  const sleep = new Promise(resolve => setTimeout(resolve, 10));
   return sleep.then(() => `Cat=${Math.floor(Math.random() * 1000)}`);
 };
 
