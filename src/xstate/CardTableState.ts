@@ -17,6 +17,13 @@ const dealCard = assign({
   },
 });
 
+//Sends a message about last card dealt.  Assumes cards are dealt in order
+const sendCardsDealt = sendParent((context: CardTableContext, _) => ({
+  type: 'cardDealt',
+  cards: context.cards,
+  dealt: context.cards.filter(c => c.dealt).length - 1,
+}));
+
 function allCardsDealt(context: CardTableContext) {
   return context.cards.filter(c => !c.dealt).length == 0;
 }
@@ -56,16 +63,31 @@ const revealClickedCard = assign({
 export const cardTableMachine = createMachine<CardTableContext>(
   {
     id: 'cardTableMachine',
-    initial: 'dealing',
+    initial: 'start',
     context: { cards: [], userPicks: [] },
     states: {
+      start: {
+        on: { tableComponentReady: { target: 'dealing' } },
+      },
       dealing: {
-        entry: 'cardsUpdated',
-        always: {
-          target: 'ready',
-          cond: 'allCardsDealt',
+        always: [
+          {
+            target: 'ready',
+            cond: 'allCardsDealt',
+          },
+          {
+            actions: 'dealCard',
+            target: 'dealingAnimation',
+          },
+        ],
+      },
+      dealingAnimation: {
+        entry: 'sendCardsDealt',
+        on: {
+          dealAninComplete: {
+            target: 'dealing',
+          },
         },
-        after: { 150: { actions: 'dealCard', target: 'dealing' } },
       },
       ready: {
         entry: 'cardsUpdated',
@@ -84,7 +106,7 @@ export const cardTableMachine = createMachine<CardTableContext>(
     },
   },
   {
-    actions: { dealCard, cardsUpdated, revealClickedCard },
+    actions: { dealCard, cardsUpdated, revealClickedCard, sendCardsDealt },
     guards: { allCardsDealt, clickedCardAlreadyRevealed, maxCardsPicked },
   }
 );
