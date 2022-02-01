@@ -37,7 +37,6 @@ export class MemoryCatCardTable extends LitElement {
       align-items: center;
       border: 5px ridge #8275be;
       border-radius: 27px;
-      height: 100%;
     }
     @keyframes dealing {
       0% {
@@ -106,13 +105,15 @@ export class MemoryCatCardTable extends LitElement {
       >
         ${this.cards.map(
           (c, idx) => html`
-            <div
-              @click="${() => cardClicked(idx)}"
-              class=${'card' + (c.dealt ? '' : ' undealt')}
-            >
-              ${c.revealed
-                ? html`<div>${c.imageUrl}</div>`
-                : html`<div>Card Back</div>`}
+            <div class="${'card' + (c.dealt ? '' : ' undealt')}">
+              <div
+                @click="${() => cardClicked(idx)}"
+                class=${'card-inner' +
+                (c.revealed ? 'card-front' : 'card-back')}
+              >
+                <div>${c.imageUrl}</div>
+                <div>Card Back</div>
+              </div>
             </div>
           `
         )}
