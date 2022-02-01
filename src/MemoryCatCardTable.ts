@@ -18,7 +18,6 @@ export class MemoryCatCardTable extends LitElement {
       justify-content: flex-start;
       font-size: calc(10px + 2vmin);
       color: #1a2b42;
-      max-width: 960px;
       margin: 0 auto;
       text-align: center;
     }
@@ -26,25 +25,36 @@ export class MemoryCatCardTable extends LitElement {
     .card-table {
       display: grid;
       grid-gap: 1rem;
-      height: auto;
-      width: 100%;
+      height: 80%;
+      width: 80vw;
     }
 
     .card {
       aspect-ratio: 1 / 1.6;
       display: flex;
-      justify-content: center;
-      align-items: center;
-      border: 5px ridge #8275be;
-      border-radius: 27px;
     }
+
     @keyframes dealing {
       0% {
-        transform: translate(50px, 1000px);
+        transform: translate(0px, 400px) rotate(80deg);
       }
       100% {
-        transform: translate(0px, 0px);
+        transform: translate(0px, 0px) rotate(0deg);
       }
+    }
+
+    .card-inner {
+      border: 5px ridge #8275be;
+      border-radius: 27px;
+      height: 100%;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+      display: flex;
+    }
+
+    .card.dealt {
+      animation: dealing 0.3s ease-out;
     }
 
     .card.undealt {
@@ -105,10 +115,10 @@ export class MemoryCatCardTable extends LitElement {
       >
         ${this.cards.map(
           (c, idx) => html`
-            <div class="${'card' + (c.dealt ? '' : ' undealt')}">
+            <div class="${'card ' + (c.dealt ? 'dealt' : ' undealt')}">
               <div
                 @click="${() => cardClicked(idx)}"
-                class=${'card-inner' +
+                class=${'card-inner ' +
                 (c.revealed ? 'card-front' : 'card-back')}
               >
                 <div>${c.imageUrl}</div>
