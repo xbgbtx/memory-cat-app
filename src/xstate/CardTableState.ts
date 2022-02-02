@@ -28,14 +28,34 @@ const dealCard = pure(
   ]
 );
 
+const revealClickedCard = pure(
+  (context: CardTableContext, event: MemoryCatEvents.BaseEvent) => [
+    assign({
+      userPicks: (context: CardTableContext, e) => [
+        ...context.userPicks,
+        (e as MemoryCatEvents.CardClicked).card,
+      ],
+      cards: (context: CardTableContext, e) => {
+        const clickedIdx = (e as MemoryCatEvents.CardClicked).card;
+        return context.cards.map((card, idx) =>
+          idx == clickedIdx ? { ...card, revealed: true } : card
+        );
+      },
+    }),
+    sendParent((context: CardTableContext, e) => {
+      const flipped = (e as MemoryCatEvents.CardClicked).card;
+      return {
+        type: 'cardFlipped',
+        cards: context.cards,
+        flipped: flipped,
+      };
+    }),
+  ]
+);
+
 function allCardsDealt(context: CardTableContext) {
   return context.cards.filter(c => !c.dealt).length == 0;
 }
-
-const cardsUpdated = sendParent((context: CardTableContext, _) => ({
-  type: 'TABLEUPDATED',
-  cards: context.cards,
-}));
 
 function clickedCardAlreadyRevealed(
   context: CardTableContext,
@@ -50,19 +70,6 @@ function maxCardsPicked(
 ) {
   return context.userPicks.length >= 2;
 }
-
-const revealClickedCard = assign({
-  userPicks: (context: CardTableContext, e) => [
-    ...context.userPicks,
-    (e as MemoryCatEvents.CardClicked).card,
-  ],
-  cards: (context: CardTableContext, e) => {
-    const clickedIdx = (e as MemoryCatEvents.CardClicked).card;
-    return context.cards.map((card, idx) =>
-      idx == clickedIdx ? { ...card, revealed: true } : card
-    );
-  },
-});
 
 export const cardTableMachine = createMachine<CardTableContext>(
   {
