@@ -1,4 +1,4 @@
-import { createMachine, assign, send, sendParent } from 'xstate';
+import { createMachine, assign, send, sendParent, actions } from 'xstate';
 import {
   MemoryCatContext,
   MemoryCatEvents,
@@ -6,23 +6,27 @@ import {
   Card,
 } from './MemoryCatAppTypes.js';
 
-const dealCard = assign({
-  cards: (context: CardTableContext, _) => {
-    let cardDealt = false;
-    return context.cards.reduce<Array<Card>>((prev, next) => {
-      if (cardDealt || next.dealt) return [...prev, next];
-      cardDealt = true;
-      return [...prev, { ...next, dealt: true }];
-    }, []);
-  },
-});
+const { pure } = actions;
 
-//Sends a message about last card dealt.  Assumes cards are dealt in order
-const sendCardsDealt = sendParent((context: CardTableContext, _) => ({
-  type: 'cardDealt',
-  cards: context.cards,
-  dealt: context.cards.filter(c => c.dealt).length - 1,
-}));
+const dealCard = pure(
+  (context: CardTableContext, event: MemoryCatEvents.BaseEvent) => [
+    assign({
+      cards: (context: CardTableContext, _) => {
+        let cardDealt = false;
+        return context.cards.reduce<Array<Card>>((prev, next) => {
+          if (cardDealt || next.dealt) return [...prev, next];
+          cardDealt = true;
+          return [...prev, { ...next, dealt: true }];
+        }, []);
+      },
+    }),
+    sendParent((context: CardTableContext, _) => ({
+      type: 'cardDealt',
+      cards: context.cards,
+      dealt: context.cards.filter(c => c.dealt).length - 1,
+    })),
+  ]
+);
 
 function allCardsDealt(context: CardTableContext) {
   return context.cards.filter(c => !c.dealt).length == 0;
@@ -82,7 +86,6 @@ export const cardTableMachine = createMachine<CardTableContext>(
         ],
       },
       dealingAnimation: {
-        entry: 'sendCardsDealt',
         on: {
           dealAninComplete: {
             target: 'dealing',
@@ -106,7 +109,7 @@ export const cardTableMachine = createMachine<CardTableContext>(
     },
   },
   {
-    actions: { dealCard, cardsUpdated, revealClickedCard, sendCardsDealt },
+    actions: { dealCard, revealClickedCard },
 
     guards: { allCardsDealt, clickedCardAlreadyRevealed, maxCardsPicked },
   }
