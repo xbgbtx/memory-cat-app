@@ -100,6 +100,19 @@ export class MemoryCatCardTable extends LitElement {
       false
     );
 
+    window.addEventListener(
+      'cardFlipped',
+      (e: Event) => {
+        const detail: MemoryCatEvents.BaseEvent = (e as CustomEvent).detail;
+        const { cards, dealt } = detail as MemoryCatEvents.CardDealt;
+        this.cards = cards;
+        window.setTimeout(
+          () => dispatchMCEvent({ type: 'flipAninComplete' }),
+          500
+        );
+      },
+      false
+    );
     dispatchMCEvent({ type: 'tableComponentReady' });
   }
 
