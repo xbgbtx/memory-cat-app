@@ -63,13 +63,7 @@ export class MemoryCatCardTable extends LitElement {
       transform: rotateY(180deg);
     }
 
-    .card-front {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      -webkit-backface-visibility: hidden; /* Safari */
-      backface-visibility: hidden;
-    }
+    .card-front,
     .card-back {
       position: absolute;
       width: 100%;
@@ -80,6 +74,9 @@ export class MemoryCatCardTable extends LitElement {
 
     .card-front {
       transform: rotateY(180deg);
+    }
+    .card-back {
+      transform: rotateY(0deg);
     }
   `;
 
