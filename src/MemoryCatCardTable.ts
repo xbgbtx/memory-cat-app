@@ -17,7 +17,6 @@ export class MemoryCatCardTable extends LitElement {
       align-items: center;
       justify-content: flex-start;
       font-size: calc(10px + 2vmin);
-      color: #1a2b42;
       margin: 0 auto;
       text-align: center;
     }
@@ -44,7 +43,7 @@ export class MemoryCatCardTable extends LitElement {
     }
 
     .card.dealt {
-      animation: dealing 0.3s ease-out;
+      animation: dealing 0.1s ease-out;
     }
 
     .card.undealt {
@@ -56,9 +55,6 @@ export class MemoryCatCardTable extends LitElement {
       border-radius: 27px;
       height: 100%;
       width: 100%;
-      justify-content: center;
-      align-items: center;
-      display: flex;
       transition: transform 0.8s;
       transform-style: preserve-3d;
     }
@@ -67,7 +63,13 @@ export class MemoryCatCardTable extends LitElement {
       transform: rotateY(180deg);
     }
 
-    .card-front,
+    .card-front {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden; /* Safari */
+      backface-visibility: hidden;
+    }
     .card-back {
       position: absolute;
       width: 100%;
@@ -77,8 +79,6 @@ export class MemoryCatCardTable extends LitElement {
     }
 
     .card-front {
-      background-color: dodgerblue;
-      color: white;
       transform: rotateY(180deg);
     }
   `;
@@ -94,7 +94,7 @@ export class MemoryCatCardTable extends LitElement {
         this.cards = cards;
         window.setTimeout(
           () => dispatchMCEvent({ type: 'dealAninComplete' }),
-          500
+          100
         );
       },
       false
