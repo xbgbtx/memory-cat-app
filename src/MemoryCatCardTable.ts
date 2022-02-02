@@ -43,6 +43,14 @@ export class MemoryCatCardTable extends LitElement {
       }
     }
 
+    .card.dealt {
+      animation: dealing 0.3s ease-out;
+    }
+
+    .card.undealt {
+      visibility: hidden;
+    }
+
     .card-inner {
       border: 5px ridge #8275be;
       border-radius: 27px;
@@ -51,14 +59,27 @@ export class MemoryCatCardTable extends LitElement {
       justify-content: center;
       align-items: center;
       display: flex;
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
     }
 
-    .card.dealt {
-      animation: dealing 0.3s ease-out;
+    .card-inner.front {
+      transform: rotateY(180deg);
     }
 
-    .card.undealt {
-      visibility: hidden;
+    .card-front,
+    .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden; /* Safari */
+      backface-visibility: hidden;
+    }
+
+    .card-front {
+      background-color: dodgerblue;
+      color: white;
+      transform: rotateY(180deg);
     }
   `;
 
@@ -118,11 +139,10 @@ export class MemoryCatCardTable extends LitElement {
             <div class="${'card ' + (c.dealt ? 'dealt' : ' undealt')}">
               <div
                 @click="${() => cardClicked(idx)}"
-                class=${'card-inner ' +
-                (c.revealed ? 'card-front' : 'card-back')}
+                class=${'card-inner ' + (c.revealed ? 'front' : 'back')}
               >
-                <div>${c.imageUrl}</div>
-                <div>Card Back</div>
+                <div class="card-front">${c.imageUrl}</div>
+                <div class="card-back">Card Back</div>
               </div>
             </div>
           `
