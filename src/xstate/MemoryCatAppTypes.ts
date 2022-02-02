@@ -11,10 +11,6 @@ export namespace MemoryCatEvents {
     data: string;
   }
 
-  export interface TableUpdated extends BaseEvent {
-    cards: Array<Card>;
-  }
-
   export interface CardDealt extends BaseEvent {
     cards: Array<Card>;
     dealt: number;
@@ -22,6 +18,11 @@ export namespace MemoryCatEvents {
 
   export interface CardClicked extends BaseEvent {
     card: number;
+  }
+
+  export interface CardFlipped extends BaseEvent {
+    cards: Array<Card>;
+    flipped: number;
   }
 }
 

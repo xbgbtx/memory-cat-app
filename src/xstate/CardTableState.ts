@@ -89,8 +89,8 @@ export const cardTableMachine = createMachine<CardTableContext>(
           },
         },
       },
+      flippingAnimation: {},
       ready: {
-        entry: 'cardsUpdated',
         on: {
           CARDCLICKED: [
             {
@@ -107,6 +107,7 @@ export const cardTableMachine = createMachine<CardTableContext>(
   },
   {
     actions: { dealCard, cardsUpdated, revealClickedCard, sendCardsDealt },
+
     guards: { allCardsDealt, clickedCardAlreadyRevealed, maxCardsPicked },
   }
 );
