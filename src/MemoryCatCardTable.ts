@@ -100,7 +100,13 @@ export class MemoryCatCardTable extends LitElement {
       actionHandler('reveal', 500),
       false
     );
-    window.addEventListener('cardsHidden', actionHandler('hide', 500), false);
+
+    //a small delay is added before hiding the cards
+    window.addEventListener(
+      'cardsHidden',
+      e => window.setTimeout(() => actionHandler('hide', 500)(e), 700),
+      false
+    );
 
     dispatchMCEvent({ type: 'tableComponentReady' });
   }
