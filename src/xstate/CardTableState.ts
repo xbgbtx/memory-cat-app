@@ -53,6 +53,26 @@ const revealPickedCard = pure(
   ]
 );
 
+const hidePickedCards = pure(
+  (context: CardTableContext, event: MemoryCatEvents.BaseEvent) => [
+    assign({
+      userPicks: (context: CardTableContext, e) => [],
+      cards: (context: CardTableContext, e) => {
+        return context.cards.map((card, idx) =>
+          context.userPicks.includes(idx) ? { ...card, revealed: false } : card
+        );
+      },
+    }),
+    sendParent((context: CardTableContext, e) => {
+      return {
+        type: 'cardsHidden',
+        cards: context.cards,
+        hidden: context.userPicks,
+      };
+    }),
+  ]
+);
+
 function allCardsDealt(context: CardTableContext) {
   return context.cards.filter(c => !c.dealt).length == 0;
 }
@@ -105,9 +125,6 @@ export const cardTableMachine = createMachine<CardTableContext>(
             {
               cond: 'pickedCardAlreadyRevealed',
             },
-            {
-              cond: 'maxCardsPicked',
-            },
             { target: 'revealCard' },
           ],
         },
@@ -115,15 +132,25 @@ export const cardTableMachine = createMachine<CardTableContext>(
       revealCard: {
         entry: 'revealPickedCard',
         on: {
-          revealAnimComplete: {
-            target: 'awaitCardPick',
-          },
+          revealAnimComplete: [
+            {
+              target: 'hidePicked',
+              cond: 'maxCardsPicked',
+            },
+            {
+              target: 'awaitCardPick',
+            },
+          ],
         },
+      },
+      hidePicked: {
+        entry: 'hidePickedCards',
+        on: { hideAnimComplete: { target: 'awaitCardPick' } },
       },
     },
   },
   {
-    actions: { dealCard, revealPickedCard },
+    actions: { dealCard, revealPickedCard, hidePickedCards },
 
     guards: { allCardsDealt, pickedCardAlreadyRevealed, maxCardsPicked },
   }

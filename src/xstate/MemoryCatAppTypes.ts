@@ -24,6 +24,11 @@ export namespace MemoryCatEvents {
     cards: Array<Card>;
     revealed: number;
   }
+
+  export interface CardsHidden extends BaseEvent {
+    cards: Array<Card>;
+    hidden: Array<number>;
+  }
 }
 
 export interface MemoryCatContext {
