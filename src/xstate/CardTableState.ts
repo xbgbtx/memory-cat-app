@@ -57,7 +57,7 @@ function allCardsDealt(context: CardTableContext) {
   return context.cards.filter(c => !c.dealt).length == 0;
 }
 
-function clickedCardAlreadyRevealed(
+function pickedCardAlreadyRevealed(
   context: CardTableContext,
   e: MemoryCatEvents.BaseEvent
 ) {
@@ -101,9 +101,9 @@ export const cardTableMachine = createMachine<CardTableContext>(
       },
       awaitCardPick: {
         on: {
-          CARDCLICKED: [
+          cardPicked: [
             {
-              cond: 'clickedCardAlreadyRevealed',
+              cond: 'pickedCardAlreadyRevealed',
             },
             {
               cond: 'maxCardsPicked',
@@ -125,6 +125,6 @@ export const cardTableMachine = createMachine<CardTableContext>(
   {
     actions: { dealCard, revealPickedCard },
 
-    guards: { allCardsDealt, clickedCardAlreadyRevealed, maxCardsPicked },
+    guards: { allCardsDealt, pickedCardAlreadyRevealed, maxCardsPicked },
   }
 );

@@ -135,7 +135,7 @@ export class MemoryCatCardTable extends LitElement {
 
     const cardClicked = (idx: number) =>
       dispatchMCEvent({
-        type: 'CARDCLICKED',
+        type: 'cardPicked',
         card: idx,
       } as MemoryCatEvents.CardClicked);
 
