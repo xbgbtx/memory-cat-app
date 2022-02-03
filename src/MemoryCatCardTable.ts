@@ -83,6 +83,7 @@ export class MemoryCatCardTable extends LitElement {
   constructor() {
     super();
 
+    //generic handler to update cards and return animation complete message
     const actionHandler =
       (animationName: string, delay: number) => (e: Event) => {
         const detail: MemoryCatEvents.BaseEvent = (e as CustomEvent).detail;
