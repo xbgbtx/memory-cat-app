@@ -28,7 +28,7 @@ const dealCard = pure(
   ]
 );
 
-const revealClickedCard = pure(
+const revealPickedCard = pure(
   (context: CardTableContext, event: MemoryCatEvents.BaseEvent) => [
     assign({
       userPicks: (context: CardTableContext, e) => [
@@ -83,7 +83,7 @@ export const cardTableMachine = createMachine<CardTableContext>(
       dealing: {
         always: [
           {
-            target: 'ready',
+            target: 'awaitCardPick',
             cond: 'allCardsDealt',
           },
           {
@@ -99,15 +99,7 @@ export const cardTableMachine = createMachine<CardTableContext>(
           },
         },
       },
-      revealCard: {
-        entry: 'revealClickedCard',
-        on: {
-          revealAnimComplete: {
-            target: 'ready',
-          },
-        },
-      },
-      ready: {
+      awaitCardPick: {
         on: {
           CARDCLICKED: [
             {
@@ -120,10 +112,18 @@ export const cardTableMachine = createMachine<CardTableContext>(
           ],
         },
       },
+      revealCard: {
+        entry: 'revealPickedCard',
+        on: {
+          revealAnimComplete: {
+            target: 'awaitCardPick',
+          },
+        },
+      },
     },
   },
   {
-    actions: { dealCard, revealClickedCard },
+    actions: { dealCard, revealPickedCard },
 
     guards: { allCardsDealt, clickedCardAlreadyRevealed, maxCardsPicked },
   }
