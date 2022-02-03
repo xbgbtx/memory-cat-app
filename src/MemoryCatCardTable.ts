@@ -98,7 +98,7 @@ export class MemoryCatCardTable extends LitElement {
     );
 
     window.addEventListener(
-      'cardFlipped',
+      'cardRevealed',
       (e: Event) => {
         const detail: MemoryCatEvents.BaseEvent = (e as CustomEvent).detail;
         const { cards, dealt } = detail as MemoryCatEvents.CardDealt;

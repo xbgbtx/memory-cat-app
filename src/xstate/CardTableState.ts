@@ -43,11 +43,11 @@ const revealClickedCard = pure(
       },
     }),
     sendParent((context: CardTableContext, e) => {
-      const flipped = (e as MemoryCatEvents.CardClicked).card;
+      const revealed = (e as MemoryCatEvents.CardClicked).card;
       return {
-        type: 'cardFlipped',
+        type: 'cardRevealed',
         cards: context.cards,
-        flipped: flipped,
+        revealed: revealed,
       };
     }),
   ]

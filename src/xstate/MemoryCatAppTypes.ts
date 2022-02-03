@@ -20,9 +20,9 @@ export namespace MemoryCatEvents {
     card: number;
   }
 
-  export interface CardFlipped extends BaseEvent {
+  export interface CardRevealed extends BaseEvent {
     cards: Array<Card>;
-    flipped: number;
+    revealed: number;
   }
 }
 
