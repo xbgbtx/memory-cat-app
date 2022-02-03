@@ -23,7 +23,6 @@ const dealCard = pure(
     sendParent((context: CardTableContext, _) => ({
       type: 'cardDealt',
       cards: context.cards,
-      dealt: context.cards.filter(c => c.dealt).length - 1,
     })),
   ]
 );
@@ -47,7 +46,6 @@ const revealPickedCard = pure(
       return {
         type: 'cardRevealed',
         cards: context.cards,
-        revealed: revealed,
       };
     }),
   ]
@@ -67,7 +65,6 @@ const hidePickedCards = pure(
       return {
         type: 'cardsHidden',
         cards: context.cards,
-        hidden: context.userPicks,
       };
     }),
   ]

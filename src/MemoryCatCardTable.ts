@@ -87,7 +87,7 @@ export class MemoryCatCardTable extends LitElement {
       'cardDealt',
       (e: Event) => {
         const detail: MemoryCatEvents.BaseEvent = (e as CustomEvent).detail;
-        const { cards, dealt } = detail as MemoryCatEvents.CardDealt;
+        const { cards } = detail as MemoryCatEvents.CardDealt;
         this.cards = cards;
         window.setTimeout(
           () => dispatchMCEvent({ type: 'dealAninComplete' }),
@@ -101,7 +101,7 @@ export class MemoryCatCardTable extends LitElement {
       'cardRevealed',
       (e: Event) => {
         const detail: MemoryCatEvents.BaseEvent = (e as CustomEvent).detail;
-        const { cards, dealt } = detail as MemoryCatEvents.CardDealt;
+        const { cards } = detail as MemoryCatEvents.CardDealt;
         this.cards = cards;
         window.setTimeout(
           () => dispatchMCEvent({ type: 'revealAnimComplete' }),
@@ -114,10 +114,10 @@ export class MemoryCatCardTable extends LitElement {
       'cardsHidden',
       (e: Event) => {
         const detail: MemoryCatEvents.BaseEvent = (e as CustomEvent).detail;
-        const { cards, dealt } = detail as MemoryCatEvents.CardDealt;
+        const { cards } = detail as MemoryCatEvents.CardDealt;
         this.cards = cards;
         window.setTimeout(
-          () => dispatchMCEvent({ type: 'revealAnimComplete' }),
+          () => dispatchMCEvent({ type: 'hideAnimComplete' }),
           500
         );
       },

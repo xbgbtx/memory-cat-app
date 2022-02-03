@@ -13,7 +13,6 @@ export namespace MemoryCatEvents {
 
   export interface CardDealt extends BaseEvent {
     cards: Array<Card>;
-    dealt: number;
   }
 
   export interface CardClicked extends BaseEvent {
@@ -22,12 +21,10 @@ export namespace MemoryCatEvents {
 
   export interface CardRevealed extends BaseEvent {
     cards: Array<Card>;
-    revealed: number;
   }
 
   export interface CardsHidden extends BaseEvent {
     cards: Array<Card>;
-    hidden: Array<number>;
   }
 }
 
