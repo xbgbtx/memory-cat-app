@@ -104,7 +104,7 @@ export class MemoryCatCardTable extends LitElement {
         const { cards, dealt } = detail as MemoryCatEvents.CardDealt;
         this.cards = cards;
         window.setTimeout(
-          () => dispatchMCEvent({ type: 'flipAninComplete' }),
+          () => dispatchMCEvent({ type: 'revealAnimComplete' }),
           500
         );
       },

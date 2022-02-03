@@ -87,19 +87,26 @@ export const cardTableMachine = createMachine<CardTableContext>(
             cond: 'allCardsDealt',
           },
           {
-            actions: 'dealCard',
-            target: 'dealingAnimation',
+            target: 'dealCard',
           },
         ],
       },
-      dealingAnimation: {
+      dealCard: {
+        entry: 'dealCard',
         on: {
           dealAninComplete: {
             target: 'dealing',
           },
         },
       },
-      flippingAnimation: {},
+      revealCard: {
+        entry: 'revealClickedCard',
+        on: {
+          revealAnimComplete: {
+            target: 'ready',
+          },
+        },
+      },
       ready: {
         on: {
           CARDCLICKED: [
@@ -109,7 +116,7 @@ export const cardTableMachine = createMachine<CardTableContext>(
             {
               cond: 'maxCardsPicked',
             },
-            { actions: 'revealClickedCard', target: 'ready' },
+            { target: 'revealCard' },
           ],
         },
       },
