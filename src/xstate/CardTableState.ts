@@ -111,7 +111,7 @@ export const cardTableMachine = createMachine<CardTableContext>(
       dealCard: {
         entry: 'dealCard',
         on: {
-          dealAninComplete: {
+          dealAnimComplete: {
             target: 'dealing',
           },
         },

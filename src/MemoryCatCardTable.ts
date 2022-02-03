@@ -83,46 +83,25 @@ export class MemoryCatCardTable extends LitElement {
   constructor() {
     super();
 
-    window.addEventListener(
-      'cardDealt',
-      (e: Event) => {
+    const actionHandler =
+      (animationName: string, delay: number) => (e: Event) => {
         const detail: MemoryCatEvents.BaseEvent = (e as CustomEvent).detail;
         const { cards } = detail as MemoryCatEvents.CardDealt;
         this.cards = cards;
         window.setTimeout(
-          () => dispatchMCEvent({ type: 'dealAninComplete' }),
-          100
+          () => dispatchMCEvent({ type: `${animationName}AnimComplete` }),
+          delay
         );
-      },
-      false
-    );
+      };
 
+    window.addEventListener('cardDealt', actionHandler('deal', 100), false);
     window.addEventListener(
       'cardRevealed',
-      (e: Event) => {
-        const detail: MemoryCatEvents.BaseEvent = (e as CustomEvent).detail;
-        const { cards } = detail as MemoryCatEvents.CardDealt;
-        this.cards = cards;
-        window.setTimeout(
-          () => dispatchMCEvent({ type: 'revealAnimComplete' }),
-          500
-        );
-      },
+      actionHandler('reveal', 500),
       false
     );
-    window.addEventListener(
-      'cardsHidden',
-      (e: Event) => {
-        const detail: MemoryCatEvents.BaseEvent = (e as CustomEvent).detail;
-        const { cards } = detail as MemoryCatEvents.CardDealt;
-        this.cards = cards;
-        window.setTimeout(
-          () => dispatchMCEvent({ type: 'hideAnimComplete' }),
-          500
-        );
-      },
-      false
-    );
+    window.addEventListener('cardsHidden', actionHandler('hide', 500), false);
+
     dispatchMCEvent({ type: 'tableComponentReady' });
   }
 
