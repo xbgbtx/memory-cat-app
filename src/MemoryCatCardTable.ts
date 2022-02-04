@@ -9,6 +9,9 @@ export class MemoryCatCardTable extends LitElement {
 
   @property({ type: Array }) cards: Array<Card> = [];
 
+  //card indexes in this array have the dancing class
+  @property({ type: Array }) dancing: Array<number> = [];
+
   static styles = css`
     main {
       min-height: 100vh;
@@ -83,29 +86,60 @@ export class MemoryCatCardTable extends LitElement {
   constructor() {
     super();
 
-    //generic handler to update cards and return animation complete message
-    const actionHandler =
-      (animationName: string, delay: number) => (e: Event) => {
-        const detail: MemoryCatEvents.BaseEvent = (e as CustomEvent).detail;
-        const { cards } = detail as MemoryCatEvents.CardDealt;
-        this.cards = cards;
-        window.setTimeout(
-          () => dispatchMCEvent({ type: `${animationName}AnimComplete` }),
-          delay
-        );
-      };
+    //Handler to store updated card data fron message
+    const updateCards = (e: Event) => {
+      const detail: MemoryCatEvents.BaseEvent = (e as CustomEvent).detail;
+      const { cards } = detail as MemoryCatEvents.CardDealt;
+      this.cards = cards;
+    };
 
-    window.addEventListener('cardDealt', actionHandler('deal', 100), false);
+    //Handler to respond that animation is complete
+    const animationComplete = (animationName: string, delay: number) => () =>
+      window.setTimeout(
+        () => dispatchMCEvent({ type: `${animationName}AnimComplete` }),
+        delay
+      );
+
     window.addEventListener(
-      'cardRevealed',
-      actionHandler('reveal', 500),
+      'cardDealt',
+      e => {
+        updateCards(e);
+        animationComplete('deal', 100)();
+      },
       false
     );
 
-    //a small delay is added before hiding the cards
+    window.addEventListener(
+      'cardRevealed',
+      e => {
+        updateCards(e);
+        animationComplete('reveal', 500)();
+      },
+      false
+    );
+
     window.addEventListener(
       'cardsHidden',
-      e => window.setTimeout(() => actionHandler('hide', 500)(e), 700),
+      e => {
+        window.setTimeout(() => {
+          updateCards(e);
+          animationComplete('hide', 500)();
+        }, 700);
+      },
+      false
+    );
+
+    window.addEventListener(
+      'correctPick',
+      e => {
+        const detail: MemoryCatEvents.BaseEvent = (e as CustomEvent).detail;
+        this.dancing = (detail as MemoryCatEvents.CorrectPick).picks;
+
+        window.setTimeout(() => {
+          this.dancing = [];
+          animationComplete('correct', 100)();
+        }, 1500);
+      },
       false
     );
 
@@ -138,6 +172,15 @@ export class MemoryCatCardTable extends LitElement {
         card: idx,
       } as MemoryCatEvents.CardClicked);
 
+    const innerClass = (c: Card, idx: number) =>
+      [
+        'card-inner',
+        c.revealed ? 'front' : 'back',
+        this.dancing.findIndex(x => x == idx) == -1 ? '' : 'dancing',
+      ]
+        .filter(className => className.length > 0)
+        .join(' ');
+
     return html`
       <div
         class="card-table"
@@ -148,7 +191,7 @@ export class MemoryCatCardTable extends LitElement {
             <div class="${'card ' + (c.dealt ? 'dealt' : ' undealt')}">
               <div
                 @click="${() => cardClicked(idx)}"
-                class=${'card-inner ' + (c.revealed ? 'front' : 'back')}
+                class=${innerClass(c, idx)}
               >
                 <div class="card-front">${c.imageUrl}</div>
                 <div class="card-back">Card Back</div>

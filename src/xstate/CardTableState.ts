@@ -70,6 +70,23 @@ const hidePickedCards = pure(
   ]
 );
 
+const processCorrectPick = pure(
+  (context: CardTableContext, event: MemoryCatEvents.BaseEvent) => {
+    const correctPicks = context.userPicks;
+    return [
+      sendParent((context: CardTableContext, e) => {
+        return {
+          type: 'correctPick',
+          picks: correctPicks,
+        };
+      }),
+      assign({
+        userPicks: (context: CardTableContext, e) => [],
+      }),
+    ];
+  }
+);
+
 function allCardsDealt(context: CardTableContext) {
   return context.cards.filter(c => !c.dealt).length == 0;
 }
@@ -86,6 +103,16 @@ function maxCardsPicked(
   e: MemoryCatEvents.BaseEvent
 ) {
   return context.userPicks.length >= 2;
+}
+
+function pickedCardsMatch(
+  context: CardTableContext,
+  e: MemoryCatEvents.BaseEvent
+) {
+  return (
+    context.userPicks.length == 2 &&
+    new Set(context.userPicks.map(p => context.cards[p].imageUrl)).size == 1
+  );
 }
 
 export const cardTableMachine = createMachine<CardTableContext>(
@@ -131,6 +158,10 @@ export const cardTableMachine = createMachine<CardTableContext>(
         on: {
           revealAnimComplete: [
             {
+              target: 'correctPick',
+              cond: 'pickedCardsMatch',
+            },
+            {
               target: 'hidePicked',
               cond: 'maxCardsPicked',
             },
@@ -140,6 +171,10 @@ export const cardTableMachine = createMachine<CardTableContext>(
           ],
         },
       },
+      correctPick: {
+        entry: 'processCorrectPick',
+        on: { correctAnimComplete: { target: 'awaitCardPick' } },
+      },
       hidePicked: {
         entry: 'hidePickedCards',
         on: { hideAnimComplete: { target: 'awaitCardPick' } },
@@ -147,8 +182,18 @@ export const cardTableMachine = createMachine<CardTableContext>(
     },
   },
   {
-    actions: { dealCard, revealPickedCard, hidePickedCards },
+    actions: {
+      dealCard,
+      revealPickedCard,
+      hidePickedCards,
+      processCorrectPick,
+    },
 
-    guards: { allCardsDealt, pickedCardAlreadyRevealed, maxCardsPicked },
+    guards: {
+      allCardsDealt,
+      pickedCardAlreadyRevealed,
+      maxCardsPicked,
+      pickedCardsMatch,
+    },
   }
 );

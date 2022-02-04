@@ -26,6 +26,11 @@ export namespace MemoryCatEvents {
   export interface CardsHidden extends BaseEvent {
     cards: Array<Card>;
   }
+
+  export interface CorrectPick extends BaseEvent {
+    cards: Array<Card>;
+    picks: Array<number>;
+  }
 }
 
 export interface MemoryCatContext {
