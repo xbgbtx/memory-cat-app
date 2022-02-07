@@ -13,6 +13,13 @@ export class MemoryCatCardTable extends LitElement {
   @property({ type: Array }) dancing: Array<number> = [];
 
   static styles = css`
+    :host {
+      --card-undealt-transform: translate(0px, 400px) rotate(80deg);
+      --card-pos-transform: translate(0px, 0px);
+      --card-front-transform: rotateY(180deg);
+      --card-back-transform: rotate(0deg);
+    }
+
     main {
       min-height: 100vh;
       display: flex;
@@ -38,10 +45,10 @@ export class MemoryCatCardTable extends LitElement {
 
     @keyframes dealing {
       0% {
-        transform: translate(0px, 400px) rotate(80deg);
+        transform: var(--card-undealt-transform);
       }
       100% {
-        transform: translate(0px, 0px) rotate(0deg);
+        transform: var(--card-pos-transform);
       }
     }
 
@@ -63,7 +70,7 @@ export class MemoryCatCardTable extends LitElement {
     }
 
     .card-inner.front {
-      transform: rotateY(180deg);
+      transform: var(--card-front-transform);
     }
 
     .card-front,
@@ -80,6 +87,25 @@ export class MemoryCatCardTable extends LitElement {
     }
     .card-back {
       transform: rotateY(0deg);
+    }
+
+    @keyframes dancing {
+      0% {
+        transform: translate(0px, 0px) var(--card-front-transform);
+      }
+      25% {
+        transform: translate(0px, 4px) var(--card-front-transform);
+      }
+      75% {
+        transform: translate(0px, -40px) var(--card-front-transform);
+      }
+      100% {
+        transform: translate(0px, 0px) var(--card-front-transform);
+      }
+    }
+
+    .card-inner.dance {
+      animation: dancing 1s ease 0s infinite;
     }
   `;
 
@@ -138,7 +164,7 @@ export class MemoryCatCardTable extends LitElement {
         window.setTimeout(() => {
           this.dancing = [];
           animationComplete('correct', 100)();
-        }, 1500);
+        }, 3000);
       },
       false
     );
@@ -176,7 +202,7 @@ export class MemoryCatCardTable extends LitElement {
       [
         'card-inner',
         c.revealed ? 'front' : 'back',
-        this.dancing.findIndex(x => x == idx) == -1 ? '' : 'dancing',
+        this.dancing.findIndex(x => x == idx) == -1 ? '' : 'dance',
       ]
         .filter(className => className.length > 0)
         .join(' ');
