@@ -100,8 +100,9 @@ const memoryCatMachine = createMachine<MemoryCatContext>(
               createCards(context.catUrls),
           },
         },
+        on: { gameOver: { target: 'gameOver' } },
       },
-      gameover: {},
+      gameOver: {},
       error: {
         after: {
           2000: { target: 'welcome' },

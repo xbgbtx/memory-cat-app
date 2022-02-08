@@ -193,6 +193,7 @@ export const cardTableMachine = createMachine<CardTableContext>(
       },
       victory: {
         entry: sendParent('victory'),
+        on: { victoryAnimComplete: { actions: sendParent('gameOver') } },
       },
     },
   },
