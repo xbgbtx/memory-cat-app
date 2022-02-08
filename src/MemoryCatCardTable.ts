@@ -105,7 +105,7 @@ export class MemoryCatCardTable extends LitElement {
     }
 
     .card-inner.dance {
-      animation: dancing 1s ease 0s infinite;
+      animation: dancing 0.3s ease-in 0s 3;
     }
   `;
 
@@ -164,7 +164,7 @@ export class MemoryCatCardTable extends LitElement {
         window.setTimeout(() => {
           this.dancing = [];
           animationComplete('correct', 100)();
-        }, 3000);
+        }, 1000);
       },
       false
     );
