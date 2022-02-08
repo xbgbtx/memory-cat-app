@@ -105,6 +105,13 @@ function maxCardsPicked(
   return context.userPicks.length >= 2;
 }
 
+function allCardsMatched(
+  context: CardTableContext,
+  e: MemoryCatEvents.BaseEvent
+) {
+  return context.cards.filter(c => !c.revealed).length == 0;
+}
+
 function pickedCardsMatch(
   context: CardTableContext,
   e: MemoryCatEvents.BaseEvent
@@ -173,11 +180,19 @@ export const cardTableMachine = createMachine<CardTableContext>(
       },
       correctPick: {
         entry: 'processCorrectPick',
-        on: { correctAnimComplete: { target: 'awaitCardPick' } },
+        on: {
+          correctAnimComplete: [
+            { target: 'victory', cond: 'allCardsMatched' },
+            { target: 'awaitCardPick' },
+          ],
+        },
       },
       hidePicked: {
         entry: 'hidePickedCards',
         on: { hideAnimComplete: { target: 'awaitCardPick' } },
+      },
+      victory: {
+        entry: sendParent('victory'),
       },
     },
   },
@@ -194,6 +209,7 @@ export const cardTableMachine = createMachine<CardTableContext>(
       pickedCardAlreadyRevealed,
       maxCardsPicked,
       pickedCardsMatch,
+      allCardsMatched,
     },
   }
 );

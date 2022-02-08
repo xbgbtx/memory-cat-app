@@ -169,6 +169,17 @@ export class MemoryCatCardTable extends LitElement {
       false
     );
 
+    window.addEventListener(
+      'victory',
+      e => {
+        this.dancing = this.cards.map((c, idx) => idx);
+        window.setTimeout(() => {
+          this.dancing = [];
+          animationComplete('victory', 100)();
+        }, 2000);
+      },
+      false
+    );
     dispatchMCEvent({ type: 'tableComponentReady' });
   }
 
