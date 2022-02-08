@@ -209,6 +209,11 @@ export class MemoryCatCardTable extends LitElement {
         card: idx,
       } as MemoryCatEvents.CardClicked);
 
+    const cardClass = (c: Card, idx: number) =>
+      ['card', c.dealt ? 'dealt' : ' undealt']
+        .filter(className => className.length > 0)
+        .join(' ');
+
     const innerClass = (c: Card, idx: number) =>
       [
         'card-inner',
@@ -225,7 +230,7 @@ export class MemoryCatCardTable extends LitElement {
       >
         ${this.cards.map(
           (c, idx) => html`
-            <div class="${'card ' + (c.dealt ? 'dealt' : ' undealt')}">
+            <div class="${cardClass(c, idx)}">
               <div
                 @click="${() => cardClicked(idx)}"
                 class=${innerClass(c, idx)}
