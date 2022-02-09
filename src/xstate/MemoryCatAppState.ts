@@ -102,7 +102,9 @@ const memoryCatMachine = createMachine<MemoryCatContext>(
         },
         on: { gameOver: { target: 'gameOver' } },
       },
-      gameOver: {},
+      gameOver: {
+        on: { newGame: { target: 'welcome' } },
+      },
       error: {
         after: {
           2000: { target: 'welcome' },
