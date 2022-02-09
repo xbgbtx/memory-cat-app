@@ -13,6 +13,7 @@ import './MemoryCatWelcome.js';
 import './MemoryCatFetch.js';
 import './MemoryCatDealing.js';
 import './MemoryCatCardTable.js';
+import './MemoryCatGameOver.js';
 
 function forwardAppEvent(e: Event) {
   memoryCatAppState.send((e as CustomEvent).detail);
@@ -107,6 +108,8 @@ export class MemoryCatApp extends LitElement {
         ></mc-fetch>`;
       case 'cardTable':
         return html`<mc-card-table></mc-card-table>`;
+      case 'gameOver':
+        return html`<mc-game-over></mc-game-over>`;
       default:
         return html`Error!`;
     }
