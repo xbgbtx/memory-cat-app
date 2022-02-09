@@ -1,4 +1,4 @@
-import { createMachine, assign, send, interpret } from 'xstate';
+import { createMachine, assign, send, actions, interpret } from 'xstate';
 import {
   MemoryCatContext,
   MemoryCatEvents,
@@ -6,6 +6,8 @@ import {
   Card,
 } from './MemoryCatAppTypes.js';
 import { cardTableMachine } from './CardTableState.js';
+
+const { pure } = actions;
 
 export function memoryCatsInitialContext() {
   return {
@@ -25,6 +27,19 @@ const storeCatUrl = assign({
     return [...context.catUrls, url];
   },
 });
+
+const resetContext = pure(
+  (context: MemoryCatContext, event: MemoryCatEvents.BaseEvent) => {
+    const initial = memoryCatsInitialContext();
+
+    //map initial context data to function pointers for assign
+    const assignEntries = Object.entries(initial).map(([key, value]) => [
+      key,
+      () => value,
+    ]);
+    return [assign(Object.fromEntries(assignEntries) as MemoryCatContext)];
+  }
+);
 
 function createCards(catUrls: Array<string>) {
   const card = (url: string) => ({
@@ -103,17 +118,20 @@ const memoryCatMachine = createMachine<MemoryCatContext>(
         on: { gameOver: { target: 'gameOver' } },
       },
       gameOver: {
-        on: { newGame: { target: 'welcome' } },
+        on: { newGame: { target: 'welcome', actions: 'resetContext' } },
       },
       error: {
         after: {
-          2000: { target: 'welcome' },
+          2000: {
+            target: 'welcome',
+            actions: 'resetContext',
+          },
         },
       },
     },
   },
   {
-    actions: { applyConfig, storeCatUrl },
+    actions: { applyConfig, storeCatUrl, resetContext },
     guards: { enoughCats, validConfig },
   }
 );
