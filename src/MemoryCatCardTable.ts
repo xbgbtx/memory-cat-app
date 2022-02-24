@@ -107,6 +107,19 @@ export class MemoryCatCardTable extends LitElement {
     .card-inner.dance {
       animation: dancing 0.3s ease-in 0s 3;
     }
+
+    .card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 27px;
+      margin: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-right: -50%;
+      transform: translate(-50%, -50%);
+    }
   `;
 
   constructor() {
@@ -235,7 +248,9 @@ export class MemoryCatCardTable extends LitElement {
                 @click="${() => cardClicked(idx)}"
                 class=${innerClass(c, idx)}
               >
-                <div class="card-front">${c.imageUrl}</div>
+                <div class="card-front">
+                  <img class="card-img" src="${c.imageUrl}" />
+                </div>
                 <div class="card-back">Card Back</div>
               </div>
             </div>
