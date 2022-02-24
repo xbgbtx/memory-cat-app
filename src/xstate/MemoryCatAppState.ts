@@ -18,9 +18,11 @@ export function memoryCatsInitialContext() {
 
 const fetchCatUrl = () => {
   return fetch('https://wow-cool.online/cats/')
-    .then(response => console.log(response))
-    .catch(e => console.log(e))
-    .then(() => `Cat=${Math.floor(Math.random() * 1000)}`);
+    .then(response => response.text())
+    .catch(e => {
+      console.log(e);
+      return 'fallback';
+    });
 };
 
 const storeCatUrl = assign({
