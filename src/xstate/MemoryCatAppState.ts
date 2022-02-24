@@ -17,21 +17,9 @@ export function memoryCatsInitialContext() {
 }
 
 const fetchCatUrl = () => {
-  const headers = new Headers();
-  headers.set('Access-Control-Allow-Origin', 'https://wow-cool.online');
-  headers.set('Content-Type', 'text/html');
-  headers.set('Accept', 'text/html');
-  headers.set('Access-Control-Allow-Headers', 'Content-Type');
-
-  const requestOptions = {
-    method: 'GET',
-    headers: headers,
-    cache: 'no-cache' as RequestCache,
-    mode: 'cors' as RequestMode,
-    redirect: 'follow' as RequestRedirect,
-  };
-  return fetch('https://wow-cool.online/cats/', requestOptions)
+  return fetch('https://wow-cool.online/cats/')
     .then(response => console.log(response))
+    .catch(e => console.log(e))
     .then(() => `Cat=${Math.floor(Math.random() * 1000)}`);
 };
 
