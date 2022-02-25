@@ -23,6 +23,7 @@ export class MemoryCatGameOver extends LitElement {
     .new-game {
       font-size: 8rem;
       margin: 20px;
+      padding: 20px;
     }
   `;
 

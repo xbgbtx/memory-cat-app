@@ -9,7 +9,13 @@ interface ConfigElements extends HTMLCollection {
 
 @customElement('mc-welcome')
 export class MemoryCatWelcome extends LitElement {
-  static styles = css``;
+  static styles = css`
+    input[type='submit'] {
+      margin: 20px;
+      padding: 20px;
+      font-size: 4rem;
+    }
+  `;
 
   render() {
     return html`
