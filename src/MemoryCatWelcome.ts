@@ -27,6 +27,7 @@ export class MemoryCatWelcome extends LitElement {
             <option value="12">Super</option>
           </select>
           <br />
+          <br />
           <input type="submit" value="Start Game" />
         </form>
       </main>
