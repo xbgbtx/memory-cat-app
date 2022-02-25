@@ -3,7 +3,7 @@ import { customElement } from 'lit/decorators.js';
 import { MemoryCatEvents } from './xstate/MemoryCatAppTypes.js';
 import { dispatchMCEvent } from './MemoryCatApp.js';
 
-const title_img = new URL('/assets/memory-cats.jpg', import.meta.url);
+const title_img = new URL('../../assets/memory-cats.jpg', import.meta.url).href;
 
 interface ConfigElements extends HTMLCollection {
   gamesize: HTMLInputElement;
