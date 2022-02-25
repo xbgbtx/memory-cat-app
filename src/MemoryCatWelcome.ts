@@ -14,6 +14,7 @@ export class MemoryCatWelcome extends LitElement {
   render() {
     return html`
       <main>
+        <h1>Memory Cats!</h1>
         <form
           @submit="${this._startGame}"
           @change="${this._applyConfig}"

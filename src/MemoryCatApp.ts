@@ -87,12 +87,7 @@ export class MemoryCatApp extends LitElement {
   }
 
   render() {
-    return html`
-      <main>
-        <h1>Memory Cats!</h1>
-        ${this.renderApp()}
-      </main>
-    `;
+    return html` <main>${this.renderApp()}</main> `;
   }
 
   renderApp() {
