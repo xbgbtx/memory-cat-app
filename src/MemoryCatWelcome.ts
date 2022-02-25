@@ -3,6 +3,8 @@ import { customElement } from 'lit/decorators.js';
 import { MemoryCatEvents } from './xstate/MemoryCatAppTypes.js';
 import { dispatchMCEvent } from './MemoryCatApp.js';
 
+const title_img = new URL('/assets/memory-cats.jpg', import.meta.url);
+
 interface ConfigElements extends HTMLCollection {
   gamesize: HTMLInputElement;
 }
@@ -24,11 +26,7 @@ export class MemoryCatWelcome extends LitElement {
   render() {
     return html`
       <main>
-        <img
-          src="assets/memory-cats.jpg"
-          alt="Memory Cats Title"
-          class="title-img"
-        />
+        <img src="${title_img}" alt="Memory Cats Title" class="title-img" />
         <form
           @submit="${this._startGame}"
           @change="${this._applyConfig}"
