@@ -102,7 +102,9 @@ export class MemoryCatApp extends LitElement {
       case 'cardTable':
         return html`<mc-card-table></mc-card-table>`;
       case 'gameOver':
-        return html`<mc-game-over></mc-game-over>`;
+        return html`<mc-game-over
+          catUrls="${JSON.stringify(this.context.catUrls)}"
+        ></mc-game-over>`;
       default:
         return html`Error!`;
     }
