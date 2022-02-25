@@ -34,12 +34,12 @@ export class MemoryCatCardTable extends LitElement {
     .card-table {
       display: grid;
       grid-gap: 1rem;
-      height: 80%;
+      padding: 3vw;
       width: 80vw;
     }
 
     .card {
-      aspect-ratio: 1 / 1.6;
+      aspect-ratio: 1 / 1.375;
       display: flex;
     }
 
@@ -213,6 +213,11 @@ export class MemoryCatCardTable extends LitElement {
     );
   }
 
+  numRows() {
+    const cards = this.cards.length;
+    return Math.floor(cards / this.numColumns());
+  }
+
   renderCards() {
     if (this.cards == null || this.cards.length == 0) return html``;
 
@@ -236,14 +241,16 @@ export class MemoryCatCardTable extends LitElement {
         .filter(className => className.length > 0)
         .join(' ');
 
+    const cardHeight = () => 100 / Math.max(1, this.numRows() + 1);
+
     return html`
       <div
         class="card-table"
-        style="grid-template-columns: repeat(${this.numColumns()}, 1fr)"
+        style="grid-template-columns: repeat(${this.numColumns()}, 1fr);grid-template-rows: repeat(${this.numRows()}, 1fr)"
       >
         ${this.cards.map(
           (c, idx) => html`
-            <div class="${cardClass(c, idx)}">
+            <div class="${cardClass(c, idx)}" style="height:${cardHeight()}vh">
               <div
                 @click="${() => cardClicked(idx)}"
                 class=${innerClass(c, idx)}
