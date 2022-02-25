@@ -72,6 +72,10 @@ export class MemoryCatCardTable extends LitElement {
 
     .card-inner.front {
       transform: var(--card-front-transform);
+      background: rgb(255, 255, 255);
+    }
+    .card-inner.back {
+      background: #8275be;
     }
 
     .card-front,
@@ -258,7 +262,7 @@ export class MemoryCatCardTable extends LitElement {
                 <div class="card-front">
                   <img class="card-img" src="${c.imageUrl}" loading="eager" />
                 </div>
-                <div class="card-back">Card Back</div>
+                <div class="card-back"></div>
               </div>
             </div>
           `
