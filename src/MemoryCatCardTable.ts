@@ -14,7 +14,7 @@ export class MemoryCatCardTable extends LitElement {
 
   static styles = css`
     :host {
-      --card-undealt-transform: translate(0px, 400px) rotate(80deg);
+      --card-undealt-transform: translate(0px, 100px) rotate(20deg);
       --card-pos-transform: translate(0px, 0px);
       --card-front-transform: rotateY(180deg);
       --card-back-transform: rotate(0deg);
@@ -54,7 +54,7 @@ export class MemoryCatCardTable extends LitElement {
     }
 
     .card.dealt {
-      animation: dealing 0.1s ease-out;
+      animation: dealing 0.08s ease-out;
     }
 
     .card.undealt {
@@ -113,7 +113,6 @@ export class MemoryCatCardTable extends LitElement {
       width: 100%;
       height: 100%;
       object-fit: contain;
-      border-radius: 27px;
       margin: 0;
       position: absolute;
       top: 50%;
@@ -144,7 +143,7 @@ export class MemoryCatCardTable extends LitElement {
       'cardDealt',
       e => {
         updateCards(e);
-        animationComplete('deal', 100)();
+        animationComplete('deal', 90)();
       },
       false
     );
