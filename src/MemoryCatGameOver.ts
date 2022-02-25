@@ -17,7 +17,12 @@ export class MemoryCatGameOver extends LitElement {
       max-height: 90vw;
       width: auto;
       height: auto;
-      padding-bottom: 10px;
+      margin-bottom: 10px;
+    }
+
+    .new-game {
+      font-size: 8rem;
+      margin: 20px;
     }
   `;
 
@@ -28,7 +33,10 @@ export class MemoryCatGameOver extends LitElement {
       <main>
         <p>You remembered all the cats!</p>
         <div class="cat-container">${this.renderCats()}</div>
-        <button @click="${() => dispatchMCEvent({ type: 'newGame' })}">
+        <button
+          class="new-game"
+          @click="${() => dispatchMCEvent({ type: 'newGame' })}"
+        >
           New Game
         </button>
       </main>
