@@ -147,7 +147,7 @@ export class MemoryCatCardTable extends LitElement {
       'cardDealt',
       e => {
         updateCards(e);
-        animationComplete('deal', 140)();
+        animationComplete('deal', 200)();
       },
       false
     );
