@@ -15,12 +15,20 @@ export class MemoryCatWelcome extends LitElement {
       padding: 20px;
       font-size: 4rem;
     }
+
+    .title-img {
+      margin: 10px;
+    }
   `;
 
   render() {
     return html`
       <main>
-        <h1>Memory Cats!</h1>
+        <img
+          src="assets/memory-cats.jpg"
+          alt="Memory Cats Title"
+          class="title-img"
+        />
         <form
           @submit="${this._startGame}"
           @change="${this._applyConfig}"
