@@ -241,7 +241,7 @@ export class MemoryCatCardTable extends LitElement {
         .filter(className => className.length > 0)
         .join(' ');
 
-    const cardHeight = () => 100 / Math.max(1, this.numRows() + 1);
+    const cardWidth = () => 98 / Math.max(1, this.numColumns() + 1);
 
     return html`
       <div
@@ -250,13 +250,13 @@ export class MemoryCatCardTable extends LitElement {
       >
         ${this.cards.map(
           (c, idx) => html`
-            <div class="${cardClass(c, idx)}" style="height:${cardHeight()}vh">
+            <div class="${cardClass(c, idx)}" style="height:${cardWidth()}vw">
               <div
                 @click="${() => cardClicked(idx)}"
                 class=${innerClass(c, idx)}
               >
                 <div class="card-front">
-                  <img class="card-img" src="${c.imageUrl}" />
+                  <img class="card-img" src="${c.imageUrl}" loading="eager" />
                 </div>
                 <div class="card-back">Card Back</div>
               </div>
