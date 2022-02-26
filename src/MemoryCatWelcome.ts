@@ -20,6 +20,8 @@ export class MemoryCatWelcome extends LitElement {
 
     .title-img {
       margin: 10px;
+      width: 90%;
+      height: auto;
     }
   `;
 
