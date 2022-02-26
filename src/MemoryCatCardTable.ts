@@ -204,19 +204,43 @@ export class MemoryCatCardTable extends LitElement {
     return html` <main>${this.renderCards()}</main> `;
   }
 
-  /**
-   * Number of columns to display cards -- must fill all rows.
-   */
   numColumns() {
-    const cards = this.cards.length;
-    const colSizes =
-      window.innerWidth > window.innerHeight ? [3, 4, 6] : [6, 4, 3];
-    const allowedCols = colSizes.filter(n => n <= cards / 2);
+    const cardCount = this.cards.length;
+    let cols = 2;
 
-    return allowedCols.reduce(
-      (prev, next) => (cards % next == 0 ? next : prev),
-      2
-    );
+    if (window.innerWidth > window.innerHeight) {
+      switch (cardCount) {
+        case 6:
+          cols = 3;
+          break;
+        case 12:
+          cols = 4;
+          break;
+        case 16:
+          cols = 4;
+          break;
+        case 24:
+          cols = 6;
+          break;
+      }
+    } else {
+      switch (cardCount) {
+        case 6:
+          cols = 2;
+          break;
+        case 12:
+          cols = 3;
+          break;
+        case 16:
+          cols = 4;
+          break;
+        case 24:
+          cols = 4;
+          break;
+      }
+    }
+
+    return cols;
   }
 
   numRows() {
