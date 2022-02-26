@@ -198,6 +198,8 @@ export class MemoryCatCardTable extends LitElement {
       false
     );
     dispatchMCEvent({ type: 'tableComponentReady' });
+
+    window.addEventListener('resize', () => this.requestUpdate());
   }
 
   render() {
