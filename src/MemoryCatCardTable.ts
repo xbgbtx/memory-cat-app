@@ -209,11 +209,13 @@ export class MemoryCatCardTable extends LitElement {
    */
   numColumns() {
     const cards = this.cards.length;
-    const allowedCols = [3, 4, 6].filter(n => n <= cards / 2);
+    const colSizes =
+      window.innerWidth > window.innerHeight ? [3, 4, 6] : [6, 4, 3];
+    const allowedCols = colSizes.filter(n => n <= cards / 2);
 
     return allowedCols.reduce(
       (prev, next) => (cards % next == 0 ? next : prev),
-      1
+      2
     );
   }
 
