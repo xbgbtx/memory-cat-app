@@ -45,16 +45,19 @@ const resetContext = pure(
   }
 );
 
+//Turn list of URLS into shuffled cards
 function createCards(catUrls: Array<string>) {
   const card = (url: string) => ({
     imageUrl: url,
     dealt: false,
     revealed: false,
   });
-  return catUrls.reduce<Array<Card>>(
-    (acc, curr) => [...acc, card(curr), card(curr)],
-    []
-  );
+  const randIdx = (a: Array<Card>) => Math.floor(Math.random() * a.length);
+  return catUrls.reduce<Array<Card>>((acc, curr) => {
+    acc.splice(randIdx(acc), 0, card(curr));
+    acc.splice(randIdx(acc), 0, card(curr));
+    return acc;
+  }, []);
 }
 
 const applyConfig = assign({
